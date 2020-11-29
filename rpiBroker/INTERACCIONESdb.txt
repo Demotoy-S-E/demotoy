@@ -1,0 +1,130 @@
+from sqlalchemy.ext.declarative import declarative_base
+#from sqlalchemy import *
+#from sqlalchemy.orm import *
+
+# Pro entity v podadresari. Podaresar *musi* obsahovat prazdny soubor __init__.py !
+#from entity.User import User
+
+'''
+Zavislosti:
+    # apt-get install python-sqlalchemy
+Kompilace:
+    # apt-get install cython
+    $ python setup.py build_ext --inplace
+Pouziti:
+    v adresari s Test.so a db.sqlite3:
+    $ python
+        >>> import Test
+'''
+
+from sqlalchemy import create_engine, exists
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.types import Integer, String
+
+
+Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    nick = Column(String)
+
+    address_id = Column(Integer, ForeignKey('address.id'))
+    address = relationship("Address", back_populates="user")
+
+class Address(Base):
+    __tablename__ = 'address'
+    id = Column(Integer, primary_key=True)
+    street = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+
+    user = relationship('User', back_populates="address")
+
+    def __init__(self, city='Jicin'): # default value
+        self.city = city
+
+
+class Main():
+    def __init__(self):
+        pass
+
+    def __del__(self):
+        pass
+
+    def run(self):
+        #   INSERT
+        if not session.query(exists().where(User.email == 'test@example.net')).scalar():
+            u1 = User()
+            u1.name = "Test user"
+            u1.email = "test@example.net"
+
+            a1 = Address()
+            a1.street = "Str 123"
+            a1.city = "City WTF"
+
+            u1.address = a1
+            session.add(a1)
+            session.add(u1)
+            session.commit()
+
+        #   test, jestli v DB dany zaznam existuje:
+        #print session.query(Address).filter_by(city='City WTF').count()
+        #print bool( session.query(Address).filter_by(city='City WTF').count() )
+
+        #   SELECT
+        if session.query(exists().where(Address.city == 'City WTF')).scalar():
+            a2 = session.query(Address).filter_by(city='City WTF').first()
+            print a2.city
+
+        if bool(session.query(Address).filter_by(city='City WTF').count()):
+            a2 = session.query(Address).filter_by(city='City WTF').first()
+            print a2.city
+
+
+        #   UPDATE
+        if session.query(exists().where(User.email == 'test@example.net')).scalar():
+            session.query(User).filter_by(email='test@example.net').update({"nick": "a"})
+            session.commit()
+
+        if session.query(exists().where(User.email == 'test@example.net')).scalar():
+            u = session.query(User).filter_by(email='test@example.net').first()
+            u.nick = "b"
+            session.commit()
+
+
+        #   DELETE
+        if session.query(exists().where(User.email == 'test@example.net')).scalar():
+            session.query(User).filter_by(email='test@example.net').delete()
+            session.commit()
+
+        if session.query(exists().where(Address.city == 'City WTF')).scalar():
+            session.query(Address).filter_by(city='City WTF').delete()
+            session.commit()
+
+
+if __name__ == '__main__' or __name__ == 'Test':    # http://stackoverflow.com/a/419986/1974494
+                                                    #  __main_ - spusteni jako skript, 'Test' - jako modul
+    #engine = create_engine('mysql://test:test@localhost:3306/test', echo=False)
+    engine = create_engine('sqlite:///db.sqlite3')
+    '''
+        sqlite:///:memory: (or, sqlite://)
+        sqlite:///relative/path/to/file.db
+        sqlite:////absolute/path/to/file.db
+    '''
+    connection = engine.connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    Main().run()
+
+    connection.close()
+
+
+
+# http://docs.sqlalchemy.org/en/latest/orm/backref.html
+
+# http://stackoverflow.com/a/30506593/1974494 !!!!!!!!!!!
