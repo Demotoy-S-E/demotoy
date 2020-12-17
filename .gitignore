@@ -41,3 +41,7 @@ msbuild.wrn
 logs/
 Prueba/
 packages/
+
+*serversettings.json
+serversettings.json
+./rpiBroker/serversettings.json
