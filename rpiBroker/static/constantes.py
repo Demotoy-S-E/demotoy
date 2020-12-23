@@ -9,3 +9,6 @@ DIRECCION_INDEX_CONSTANTE = '/'
 
 # Rpi statics
 SECUANCIA_SEGUNDOS_RPI = 10
+
+# Rpi pins
+BUZZER_PIN = 17
