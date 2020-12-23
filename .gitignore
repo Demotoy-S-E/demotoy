@@ -41,3 +41,5 @@ msbuild.wrn
 logs/
 Prueba/
 packages/
+
+*serversettings.json
