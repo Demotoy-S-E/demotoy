@@ -1,17 +1,21 @@
 from flask import _app_ctx_stack, jsonify
-from flask_cors import CORS
+import pymysql
+from controladores.indexcontroller import Indexcontroller
+from controladores.registrocontroller import Registrocontroller
+from controladores.principalcontroller import Principalcontroller
 from servicios.weblogging import Applogging
 from servicios.mysqlDB import MysqlDB
+from servicios.autenticacion import Autenticacion
 from modelos import usuario
 from servicios.clienteRPI import clienteRPI
+
+pymysql.install_as_MySQLdb() # hay un error con el paquete principal de mysqlclient, utilizo esta linea para obligar utilizar este paquete
 
 class Startup:
 
     def __init__(self, app):
         self.__app = app
-        CORS(self.__app)
         self.__log_startup = Applogging("Startup")
-        self.sesion = None
         self.__servicio_db = None
         self.__servicioRPi1 = None
         self.__servicioRPi2 = None
@@ -38,6 +42,16 @@ class Startup:
 
     def __add_servicio_autenticacion(self):
         self.__log_startup.info_log("Iniciando servicio autenticacion...")
+        self.servicio_autenticacion = Autenticacion(self.__servicio_db)
+
+        index_controller_log = Applogging("Controlador Index")
+        self.__app.add_url_rule('/', endpoint = 'index', view_func = Indexcontroller.as_view(
+            'index', autenticacion = self.servicio_autenticacion, index_controller_log = index_controller_log), methods = ["GET", "POST"])
+
+        registro_controller_log = Applogging("Controlador Registro")
+        self.__app.add_url_rule('/registro', endpoint = 'registro', view_func = Registrocontroller.as_view(
+            'registro', autenticacion = self.servicio_autenticacion, registro_controller_log = registro_controller_log), methods = ["GET", "POST"])
+
 
     """ Aqui se aniade el metodo para cliente RPI1 """
     def __add_servicio_cliente_rpi1(self):

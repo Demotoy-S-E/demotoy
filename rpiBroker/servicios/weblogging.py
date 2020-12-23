@@ -17,6 +17,18 @@ class Applogging:
         current_date = datetime.today()
         return print(f" \033[1;31;48m [{current_date}] ERROR {self.log_type}: {log}")
 
+    def info_feeddback(self, log):
+        current_date = datetime.today()
+        return f" \033[1;32;48m {self.log_type}: {log}"
+
+    def aviso_feeddback(self, log):
+        current_date = datetime.today()
+        return f" \033[1;33;48m {self.log_type}: {log}"
+
+    def error_feeddback(self, log):
+        current_date = datetime.today()
+        return f" \033[1;31;48m {self.log_type}: {log}"
+
 
 
 
