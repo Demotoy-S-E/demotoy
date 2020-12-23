@@ -62,5 +62,5 @@ class Startup:
     """ Aqui se aniade el metodo para cliente RPI2 """
     def __add_servicio_cliente_rpi2(self):
         self.__log_startup.info_log("Iniciando servicio cliente RPi2..")
-        nombre_log = "RPI"
+        nombre_log = "RPI2"
         self.__servicioRPi2 = clienteRPI(nombre_log)
