@@ -1,14 +1,14 @@
-click==7.1.2
-fernet==1.0.1
-Flask==1.1.2
+click==7.1.2 
+fernet==1.0.1  // instalar
+Flask==1.1.2 // instalar
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
-mysql-connector==2.2.9
-mysqlclient==2.0.2
-pyaes==1.6.1
-PyMySQL==0.10.1
+mysql-connector==2.2.9 // instalar
+mysqlclient==2.0.2 // instalar
+pyaes==1.6.1 // instalar
+PyMySQL==0.10.1 // instalar
 six==1.15.0
-SQLAlchemy==1.3.22
-SQLAlchemy-Utils==0.36.8
+SQLAlchemy==1.3.22 // instalar
+SQLAlchemy-Utils==0.36.8 // instalar
 Werkzeug==1.0.1
