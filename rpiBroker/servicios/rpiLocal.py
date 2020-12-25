@@ -1,7 +1,9 @@
+
+import comun.excepciones as excepciones
 try:
     import RPi.GPIO as GPIO
 except:
-    print("")
+    excepciones.error_gpio_import_log()
 
 import subprocess
 import os

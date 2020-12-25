@@ -1,0 +1,17 @@
+version: '2'
+services:
+    mysql:
+      image: mysql-image-service
+      container_name: mysql-service
+      ports:
+         - "127.0.0.1:3306:3306/tcp"
+      environment:
+        MYSQL_ROOT_PASSWORD: rootpassword
+        MYSQL_DATABASE: domotoyawsdatabase
+        MYSQL_USER: domotoystgsvr@domotoystgsvr
+        MYSQL_PASSWORD: ySyd,r6Y1h:jNw6
+      volumes:
+        - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

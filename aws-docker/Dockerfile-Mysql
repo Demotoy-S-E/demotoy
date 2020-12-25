@@ -1,0 +1,20 @@
+FROM mysql
+
+WORKDIR /etc/mysql/conf.d
+
+# Delete configuration file from base image
+RUN rm -rf /etc/mysql/conf.d/docker.cnf
+
+# Copy custom mysql config file into config folder
+COPY ./wwwroot/mysql-config.cnf ./
+COPY ./wwwroot/cer/mysqlcertificate.cer /etc/ssl/certs/
+
+# RUN echo "listen_addresses='*'"
+
+# RUN update-ca-certificates
+
+# We indicate to execute the program in the executable of the project
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 3306 33060
+CMD ["mysqld"]
