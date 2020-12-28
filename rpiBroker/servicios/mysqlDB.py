@@ -43,7 +43,7 @@ class MysqlDB(metaclass=Singleton):
             self.__server_ssh = self.__tunel_ssh()
             self.__server_ssh.start()
             self.__cadena_conexion = self.__obtener_parametros_servidor_desde_json()
-            self.__mysql_log.info_log(f"Utilizando direccion: {self.__cadena_conexion}")
+            self.__mysql_log.info_log(f"Utilizando direccion local mediante ssh: {self.__cadena_conexion}")
             self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
             self.__crear_conexion()
         except:
