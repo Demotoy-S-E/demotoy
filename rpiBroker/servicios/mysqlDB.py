@@ -49,14 +49,6 @@ class MysqlDB(metaclass=Singleton):
         except:
             self.__mysql_log.error_log("No se han podido iniciar las instancias de la conexion")
 
-    def __crear_conexion_ssh(self):
-        try:
-            self.__server_ssh.connect( hostname = self.__ip_host, username = "ubuntu", pkey = self.__certificado_privado )
-            stdin, stdout, stderr = self.__server_ssh.exec_command('ls')
-            self.__mysql_log.info_log(stdout.readlines())
-        except:
-            self.__mysql_log.error_log("No se han podido establecer la conexion ssh")
-
     def __tunel_ssh(self):
         try:
             server = SSHTunnelForwarder(
