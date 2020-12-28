@@ -8,10 +8,10 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: rootpassword
         MYSQL_DATABASE: domotoyawsdatabase
-        MYSQL_USER: domotoystgsvr@domotoystgsvr
+        MYSQL_USER: domotoystgsvr
         MYSQL_PASSWORD: ySyd,r6Y1h:jNw6
       volumes:
-        - db_data:/var/lib/mysql
+        - db_data:/var/lib/mysql-db
 
 volumes:
   db_data:

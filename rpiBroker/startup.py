@@ -34,14 +34,20 @@ class Startup:
         self.__add_controller_principal()
 
     def __add_servicio_db(self):
+        self.__log_startup.info_log("Iniciando servicio mysql...")
+        self.__servicio_db = MysqlDB(self.__app, _app_ctx_stack)
+        self.sesion = self.__servicio_db.sesion
+        self.__log_startup.info_log("Creando tablas")
+        usuario.Base.metadata.create_all(bind = self.__servicio_db.engine)
+        self.sesion.commit() 
         try: 
-            self.__log_startup.info_log("Iniciando servicio mysql...")
-            self.__servicio_db = MysqlDB(self.__app, _app_ctx_stack)
-            self.sesion = self.__servicio_db.sesion
-            self.__log_startup.info_log("Creando tablas")
-            usuario.Base.metadata.create_all(bind = self.__servicio_db.engine)
-            self.sesion.commit()
-            self.sesion.close()
+            # self.__log_startup.info_log("Iniciando servicio mysql...")
+            # self.__servicio_db = MysqlDB(self.__app, _app_ctx_stack)
+            # self.sesion = self.__servicio_db.sesion
+            # self.__log_startup.info_log("Creando tablas")
+            # usuario.Base.metadata.create_all(bind = self.__servicio_db.engine)
+            # self.sesion.commit()    
+            print()
         except:
             self.__log_startup.error_log("Error a la hora de crear tablas")
 
