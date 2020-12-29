@@ -7,6 +7,17 @@ from comun.singleton import Singleton
 from servicios.weblogging import Applogging
 import json
 from time import sleep
+from static.constantes import (
+    MYSQL_IP_LOCAL, 
+    MYSQL_USER, 
+    MYSQL_CONTRASENIA, 
+    MYSQl_PUERTO, 
+    MYSQL_NOMBRE_DB, 
+    SSH_IP_REMOTA, 
+    SSH_PUERTO, 
+    SSH_NOMBRE_USUARIO, 
+    SSH_PRIVATE_KEY_PATH, 
+    PUERTO_SOCKET_LOCAL)
 
 Base = declarative_base()
 
@@ -15,12 +26,6 @@ class MysqlDB(metaclass=Singleton):
     def __init__(self, app, _app_ctx_stack):
         self.__app = app
         self.__mysql_log = Applogging("MysqlDB")
-        self.__certificado_privado = paramiko.RSAKey.from_private_key_file("domotoy-key.pem")
-        self.__ip_local_con_ssh = '127.0.0.1'
-        self.__ip_host = None
-        self.__puerto_host = None
-        self.__server_ssh = None
-        self.__cadena_conexion = None
         self.engine = None
         self.sesion = None
         self.__init_configuracion(_app_ctx_stack)
@@ -42,8 +47,9 @@ class MysqlDB(metaclass=Singleton):
             self.__obtener_direccion_remota_ssh()
             self.__server_ssh = self.__tunel_ssh()
             self.__server_ssh.start()
-            self.__cadena_conexion = self.__obtener_parametros_servidor_desde_json()
-            self.__mysql_log.info_log(f"Utilizando direccion local mediante ssh: {self.__cadena_conexion}")
+            puerto_socker_ssh = str(self.__server_ssh.local_bind_port)
+            self.__cadena_conexion = self.__obtener_parametros_servidor_desde_json(puerto_socker_ssh)
+            self.__mysql_log.info_log(f"Utilizando direccion mysql mediante ssh: {self.__cadena_conexion}")
             self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
             self.__crear_conexion()
         except:
@@ -52,12 +58,12 @@ class MysqlDB(metaclass=Singleton):
     def __tunel_ssh(self):
         try:
             server = SSHTunnelForwarder(
-            (self.__ip_host , 22),
-            ssh_username='ubuntu',
-            ssh_pkey='domotoy-key.pem',
-            remote_bind_address=(self.__ip_local_con_ssh, int(self.__puerto_host)),
+            (SSH_IP_REMOTA , SSH_PUERTO),
+            ssh_username = SSH_NOMBRE_USUARIO,
+            ssh_pkey = SSH_PRIVATE_KEY_PATH,
+            remote_bind_address=(MYSQL_IP_LOCAL, MYSQl_PUERTO),
             )  
-            self.__mysql_log.info_log(f"Utilizando la direccion remota {self.__ip_host}:22 con IP host servidor {self.__ip_local_con_ssh}:{self.__puerto_host}")
+            self.__mysql_log.info_log(f"Utilizando la direccion remota {SSH_IP_REMOTA}:{SSH_PUERTO} con IP host servidor {MYSQL_IP_LOCAL}:{MYSQl_PUERTO}")
             return server 
         except:
             self.__mysql_log.error_log("No se han podido establecer la conexion ssh")
@@ -68,30 +74,36 @@ class MysqlDB(metaclass=Singleton):
         self.sesion = Session()
 
     def __obtener_direccion_remota_ssh(self):
+        global SSH_IP_REMOTA, SSH_PUERTO, SSH_NOMBRE_USUARIO, SSH_PRIVATE_KEY_PATH
         try:
             with open("awsserversettings.json") as server_settings_json:
                 datos = json.load(server_settings_json)
-                for configuracion in datos['settings']:
-                    self.__ip_host = configuracion['host']
-                    self.__puerto_host = configuracion['port']
+                for configuracion in datos['ssh-settings']:
+                    SSH_IP_REMOTA = configuracion['host-remote']
+                    SSH_PUERTO = configuracion['port']
+                    SSH_NOMBRE_USUARIO = configuracion['server-user']
+                    SSH_PRIVATE_KEY_PATH = configuracion['private-key']
         except:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
-    def __obtener_parametros_servidor_desde_json(self):
+    def __obtener_parametros_servidor_desde_json(self, puerto_socker_ssh):
+        global MYSQL_IP_LOCAL, MYSQL_USER, MYSQL_CONTRASENIA, MYSQl_PUERTO, MYSQL_NOMBRE_DB, PUERTO_SOCKET_LOCAL
         try:
+            PUERTO_SOCKET_LOCAL = puerto_socker_ssh
             cadena_conexion = None
             with open("awsserversettings.json") as server_settings_json:
                 datos = json.load(server_settings_json)
                 self.__mysql_log.info_log(datos)
-                for configuracion in datos['settings']:
-                    usuario = configuracion['admin-user']
-                    contrasenia = configuracion['password']
-                    puerto_local = str(self.__server_ssh.local_bind_port)
-                    base_de_datos = configuracion['db']
-                    cadena_conexion = self.__crear_cadena_conexion(usuario, contrasenia, self.__ip_local_con_ssh, puerto_local, base_de_datos)
+                for configuracion in datos['mysql-server-settings']:
+                    MYSQL_IP_LOCAL = configuracion['host-local']
+                    MYSQL_USER = configuracion['admin-user']
+                    MYSQL_CONTRASENIA = configuracion['password']
+                    MYSQl_PUERTO = configuracion['mysql-port']
+                    MYSQL_NOMBRE_DB = configuracion['db']
+                    cadena_conexion = self.__crear_cadena_conexion(MYSQL_USER, MYSQL_CONTRASENIA, MYSQL_IP_LOCAL, PUERTO_SOCKET_LOCAL, MYSQL_NOMBRE_DB)
             return cadena_conexion
         except:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
-    def __crear_cadena_conexion(self, usuario, contrasenia, ip_host, puerto, base_de_datos):
-        return f"mysql+mysqldb://{usuario}:{contrasenia}@{ip_host}:{puerto}/{base_de_datos}"
+    def __crear_cadena_conexion(self, usuario, contrasenia, ip_local, puerto_socket, base_de_datos):
+        return f"mysql+mysqldb://{usuario}:{contrasenia}@{ip_local}:{puerto_socket}/{base_de_datos}"

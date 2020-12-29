@@ -1,3 +1,18 @@
+# Mysql server 
+MYSQL_IP_LOCAL = "127.0.0.1"
+MYSQL_USER = None
+MYSQL_CONTRASENIA = None
+MYSQl_PUERTO = 3306
+MYSQL_NOMBRE_DB = None
+
+PUERTO_SOCKET_LOCAL = None
+
+# SSH server
+SSH_IP_REMOTA = None
+SSH_PUERTO = None
+SSH_NOMBRE_USUARIO = None
+SSH_PRIVATE_KEY_PATH = None
+
 # Url views statics
 TEMPLATE_INDEX_CONSTANTE = '/index.html'
 TEMPLATE_REGISTRO_CONSTANTE = '/registro.html'
