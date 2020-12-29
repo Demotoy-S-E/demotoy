@@ -47,8 +47,8 @@ class MysqlDB(metaclass=Singleton):
             self.__obtener_direccion_remota_ssh()
             self.__server_ssh = self.__tunel_ssh()
             self.__server_ssh.start()
-            puerto_socker_ssh = str(self.__server_ssh.local_bind_port)
-            self.__cadena_conexion = self.__obtener_parametros_servidor_desde_json(puerto_socker_ssh)
+            puerto_socket_ssh = str(self.__server_ssh.local_bind_port)
+            self.__cadena_conexion = self.__obtener_parametros_servidor_desde_json(puerto_socket_ssh)
             self.__mysql_log.info_log(f"Utilizando direccion mysql mediante ssh: {self.__cadena_conexion}")
             self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
             self.__crear_conexion()
@@ -86,10 +86,10 @@ class MysqlDB(metaclass=Singleton):
         except:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
-    def __obtener_parametros_servidor_desde_json(self, puerto_socker_ssh):
+    def __obtener_parametros_servidor_desde_json(self, puerto_socket_ssh):
         global MYSQL_IP_LOCAL, MYSQL_USER, MYSQL_CONTRASENIA, MYSQl_PUERTO, MYSQL_NOMBRE_DB, PUERTO_SOCKET_LOCAL
         try:
-            PUERTO_SOCKET_LOCAL = puerto_socker_ssh
+            PUERTO_SOCKET_LOCAL = puerto_socket_ssh
             cadena_conexion = None
             with open("awsserversettings.json") as server_settings_json:
                 datos = json.load(server_settings_json)

@@ -8,6 +8,9 @@ class Usuario(Base):
     def __init__(self, nombre, email, contrasenia):
         self.nombre = nombre
         self.email = email
+        self.nombre_completo = None
+        self.numero_telefono = None
+        self.direccion = None
         self.__clave = Fernet.generate_key()
         self.__clave.decode()
         self.__token = self.__encrypt(contrasenia.encode(), self.__clave)

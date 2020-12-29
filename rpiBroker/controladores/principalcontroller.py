@@ -6,12 +6,10 @@ from static.constantes import TEMPLATE_PRINCIPAL_CONSTANTE, DIRECCION_INDEX_CONS
 
 class Principalcontroller(MethodView):
 
-    def __init__(self, autenticacion , rpi_local, rpi1, rpi2, principal_controller_log):
+    def __init__(self, autenticacion , rpi_local, principal_controller_log):
         self.__servicio_autenticacion = autenticacion
         self.__principal_log = principal_controller_log
         self.__rpi_local = rpi_local
-        self.__rpi1 = rpi1
-        self.__rpi2 = rpi2
 
     def get(self):
         if (self.__servicio_autenticacion.usuario_autenticado == True):
