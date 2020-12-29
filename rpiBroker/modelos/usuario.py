@@ -5,12 +5,12 @@ from fernet import Fernet
 
 class Usuario(Base):
     
-    def __init__(self, nombre, email, contrasenia):
+    def __init__(self, nombre, email, contrasenia, nombre_completo, numero_telefono, direccion):
         self.nombre = nombre
         self.email = email
-        self.nombre_completo = None
-        self.numero_telefono = None
-        self.direccion = None
+        self.nombre_completo = nombre_completo
+        self.numero_telefono = numero_telefono
+        self.direccion = direccion
         self.__clave = Fernet.generate_key()
         self.__clave.decode()
         self.__token = self.__encrypt(contrasenia.encode(), self.__clave)
@@ -32,3 +32,6 @@ class Usuario(Base):
     email = Column(EmailType)
     __clave = Column(LargeBinary(2048), nullable = False)
     __token = Column(LargeBinary(2048), nullable = False)
+    nombre_completo = Column(String(20), index = True, nullable = True)
+    numero_telefono = Column(String(9), index = True, nullable = False)
+    direccion = Column(String(20), index = True, nullable = False)

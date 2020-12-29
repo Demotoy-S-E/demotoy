@@ -7,6 +7,9 @@ from servicios.weblogging import Applogging
 from servicios.mysqlDB import MysqlDB
 from servicios.autenticacion import Autenticacion
 from modelos import usuario
+from modelos import medicionTempemperaturaInterna
+from modelos import medicionTempemperaturaExterna
+from modelos import medicionAccelerometro
 from servicios.clienteRPI1 import ClienteRPI1
 from servicios.clienteRPI2 import ClienteRPI2
 from servicios.rpiLocal import RpiLocal
@@ -40,6 +43,9 @@ class Startup:
             self.sesion = self.__servicio_db.sesion
             self.__log_startup.info_log("Creando tablas")
             usuario.Base.metadata.create_all(bind = self.__servicio_db.engine)
+            medicionTempemperaturaInterna.Base.metadata.create_all(bind = self.__servicio_db.engine)
+            medicionTempemperaturaExterna.Base.metadata.create_all(bind = self.__servicio_db.engine)
+            medicionAccelerometro.Base.metadata.create_all(bind = self.__servicio_db.engine)
             self.sesion.commit() 
         except:
             self.__log_startup.error_log("Error a la hora de crear tablas")

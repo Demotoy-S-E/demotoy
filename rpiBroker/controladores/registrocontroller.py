@@ -18,13 +18,22 @@ class Registrocontroller(MethodView):
         nombre_form = informacion_request.get("nombre")
         email_form = informacion_request.get("email")
         contrasenia_form = informacion_request.get("contrasenia")
+        nombre_completo_form = informacion_request.get("nombre_completo")
+        numero_form = informacion_request.get("numero_telefono")
+        direccion_form = informacion_request.get("direccion")
         campos_vacios = self.__revisar_campos_vacios(informacion_request)
         if (campos_vacios):
             self.__registro_log.warning_log("Se han encontrado campos vacios")
             feedback = f"Campos vacios en {', '.join(campos_vacios)}"
             return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)
         else:
-            usuario_creado = self.__autenticacion.crear_usuario(nombre_form, email_form, contrasenia_form)
+            usuario_creado = self.__autenticacion.crear_usuario(
+                nombre_form = nombre_form, 
+                email_form = email_form, 
+                contrasenia_form = contrasenia_form,
+                nombre_completo_form = nombre_completo_form,
+                numero_form = numero_form,
+                direccion_form = direccion_form)
             if (usuario_creado):
                 return render_template(TEMPLATE_INDEX_CONSTANTE)
             else:

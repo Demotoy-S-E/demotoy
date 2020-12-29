@@ -13,14 +13,20 @@ class Autenticacion(metaclass=Singleton):
         self.usuario_autenticado = False
         self.ultima_autenticacion = None
 
-    def crear_usuario(self, nombre_form, email_form, contrasenia_form) -> bool:
+    def crear_usuario(self, nombre_form, email_form, contrasenia_form, nombre_completo_form, numero_form, direccion_form) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
             if (self.__sesion.query(exists().where(Usuario.nombre == nombre_form)).scalar()):
                 self.__autenticacion_log.warning_log(f"El usuario con nombre {nombre_form} ya existe")
                 return False
             else:
-                nuevo_usuario = Usuario(nombre_form, email_form, contrasenia_form)
+                nuevo_usuario = Usuario(
+                    nombre = nombre_form, 
+                    email = email_form, 
+                    contrasenia = contrasenia_form,
+                    nombre_completo = nombre_completo_form,
+                    numero_telefono = numero_form,
+                    direccion = direccion_form)
                 self.__sesion.add(nuevo_usuario)
                 self.__sesion.commit()
                 return True
