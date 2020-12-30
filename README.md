@@ -1,5 +1,6 @@
 # demotoy
-
+## Vision general
+![Alt text](../docs/img.jpg?raw=true "propuesta-proyecto-SE")
 ## Requisitos (28/12/20)
 ```
 click==7.1.2 
@@ -19,12 +20,16 @@ Werkzeug==1.0.1
 sshtunnel==0.3.1 // instalar
 ```
 ## Servidor remoto Ubuntu-Server
-El servicio en cloud para base de datos escogido es una micro maquina virtual de AWS (Amazon Web Services) ya que es gratuito. A esta maquina virtual se le implementado un contenedor Docker con un servidor Mysql en su interior. En la carpeta aws-docker esta toda la configuracion utilizada. Mediante un docker-compose se pone en "Up" un contenedor linux que inyecta una configuracion previo, en este caso se crea una base de datos y usuario con acceso a ella.
+El servicio en cloud para base de datos escogido es una micro maquina virtual de AWS (Amazon Web Services), que es gratuito. A esta maquina virtual se le implementado un contenedor Docker con un servidor Mysql en su interior. En la carpeta aws-docker esta toda la configuracion utilizada. Mediante un docker-compose se pone en "Up" un contenedor linux que inyecta una configuracion previa, en este caso se crea una base de datos y usuario con acceso a ella.
 
 Para acceder al servidor remoto hace falta la clave privada que AWS te la proporciona por primera vez. Para conectarte por ssh:
 
 ```
 ssh -i "[clave privada]" [usuario administrador o sudo]@[ip servidor]
+```
+Ejemplo:
+```
+ssh -i "mi-clave.pem" ubuntu_user@14-15.amazon.com
 ```
 Dockerfile-Mysql:
 ```
@@ -82,7 +87,7 @@ bind-address=0.0.0.0
 ## Servicios
 
 ### Inyeccion de dependencias (startup.py)
-Es el punto de inicio de la aplicacion. Se definen los objetos que se van a instaciar, todos los servicios:
+Es el punto de inicio de la aplicacion. Se definen los objetos que se van a instanciar, todos los servicios:
 
 ```
 def __inyeccion_dependencias(self):
@@ -108,17 +113,25 @@ La clase Singleton se utiliza para ser heredada (padre) de aquellos servicios do
 class Autenticacion(metaclass=Singleton):
     ...
 ```
-Una vez que se hace la instacia ```x = Autenticacion()```, aun que después haya otra instacia ```y = Autenticacion()```; ```x == y``` ya que y recogerá la instacia ya creada (x).
+Una vez que se hace la instacia ```x = Autenticacion()```, aun que después haya otra instacia ```y = Autenticacion()```; ```x == y``` ya que ```y``` recogerá la instacia ya creada ```x```.
+
+```
+x = Autenticacion()
+y = Autenticacion()
+if (x == y):
+    print("True")
+    # True
+```
 
 ### Servicio Mysql con AWS-Docker
 
 Se ha optado por utilizar una ORM (sqlalchemy) que se encarge que utilizar por debajo el lenguaje sql. De esa manera conseguimos los siguientes beneficios:
  - No tenemos que crear statements sqls y organizarlos.
- - No tenemos que preocuparnos de la sincronizacion de los modelos y las tablas, se eso se encgarga la ORM.
+ - No tenemos que preocuparnos de la sincronizacion de los modelos y las tablas, de eso se encarga la ORM.
  - La libreria se encarga de migrar aquellos cambios de la logica de datos de manera automatica, él crea las tablas.
  - Añade seguridad a las conexiones por que no manipulamos directamente lenguaje sql.
 
-El servicio mysqlDB.py utiliza un paquete externo llamda ```sshtunnel``` que incorpora objetos dedicados a conexiones ssh. Primero se todo se obtiene las credenciales de autenticacion y la clave privada para hacer el tunel.
+El servicio mysqlDB.py utiliza un paquete externo llamda ```sshtunnel``` que incorpora objetos dedicados a conexiones ssh. Primero de todo se obtiene las credenciales de autenticacion y la clave privada para hacer el tunel.
 
 ```
 server = SSHTunnelForwarder(
@@ -130,7 +143,23 @@ server = SSHTunnelForwarder(
             self.__mysql_log.info_log(f"Utilizando la direccion remota {self.__ip_host}:22 con IP host servidor {self.__ip_local_con_ssh}:{self.__puerto_host}")
             return server
 ```
-Una vez que se ha hecho el tunel, la direccion que meadiante una cadena de conexion que apunta a 127.0.0.1:[Puerto utilizado para ese proceso] se puede acceder al contenedor Docker.
+Una vez que se ha hecho el tunel, la direccion meadiante una cadena de conexion que apunta a 127.0.0.1:[Puerto utilizado para ese proceso] se puede acceder al contenedor Docker del servidor ubuntu.
+
+Para la conexion con la base de datos:
+```
+    def __crear_conexion(self):
+        self.engine.connect()
+        Session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+        self.sesion = Session()
+```
+Para las interacciones con la base de datos se hace medienta codigo. Para comprobar si existe usuario:
+```
+self.__sesion.query(exists().where(Usuario.nombre == nombre_form)).scalar()
+```
+Insert de usuario:
+```
+self.__sesion.add(nuevo_usuario)
+```
 
 ### Servicio Autenticacion
 Mediante el servicio se crean usuarios:
@@ -150,7 +179,7 @@ Mediante el servicio se crean usuarios:
             self.__autenticacion_log.error_log("Ha habido un problema para crear usuario")
             return False
 ```
-Se comprueban sus credenciales apra la autenticacion:
+Se comprueban sus credenciales para la autenticacion:
 ```
     def comprobar_autenticacion(self, nombre_form, contrasenia_form) -> bool:
         try:
@@ -174,9 +203,9 @@ Se comprueban sus credenciales apra la autenticacion:
             self.__autenticacion_log.error_log("Ha habido un problema con la autenticacion")
 ```
 ### Servicios Backgound (hilos)
-Para los servicios que se encargan de operar con entradas y salidas de la RPi la mejor solucion es utilizar hilos de procesamiento en background. El objeto es desprenderse de bucles que se apoderan el ciclo de la aplicación, de esa manera al hacer hilos asincronos la aplicacion puede hacer varios cosas a la vez. Se dejan que esos procesos se ejecuten en backgound y que administren esas entradas y salidas locales.
+Para los servicios que se encargan de operar con entradas y salidas de la RPi la mejor solucion es utilizar hilos de procesamiento en background. El objetivo es desprenderse de bucles que se apoderan del ciclo de la aplicación, de esa manera al hacer hilos asincronos la aplicacion puede hacer varios cosas a la vez. Se dejan que esos procesos se ejecuten en backgound y que administren esas entradas y salidas locales.
 
-Con el metodo comenzar_servicio_backgorund() se define un metodo donde se crea un objeto sque asigna un proceso especifico:
+Con el metodo comenzar_servicio_backgorund() se define un metodo donde se crea un objeto que asigna un proceso especifico:
 ```
 def __comenzar_servicio_background(self):
         try:
@@ -211,7 +240,7 @@ Para crear las tablas basados en los modelos SQLAlchemy es necesario que hereden
 class Usuario(Base):
     ...
 ```
-Para definir las columnas de la tabla:
+Para definir los parametros (columnas) de la tabla:
 ```
     __tablename__ = 'usuario'
     id = Column(Integer, primary_key = True, index = True, nullable = False)
@@ -239,15 +268,15 @@ self.__clave = Fernet.generate_key()
         return Fernet(key).decrypt(token)
 ```
 
-1. Se recoge la contrasenia como string.
+1. Se recoge la contrseña como string.
 2. Se genera una clave (bytes).
-3. Se encripta un objeto tipo token mediante esa clave y la contrasenia. 
+3. Se encripta un objeto tipo token mediante esa clave y la contraseña. 
 4. Ambas columnas son de tipo binarios (BLOB en mysql).
-5. Para obtener la contrasenia a la hora de comprar credenciales, mediante la funcion get_contrasenia() se desencrpta el token para obtner el string.
+5. Para obtener la contraseña a la hora de comparar credenciales, mediante la funcion get_contrasenia() se desencripta el token para obtener el string.
 
 ## Controladores
 
-Definicion:
+Definicion (rounting):
 ```
 self.__app.add_url_rule('/', endpoint = 'index', view_func = Indexcontroller.as_view(
             'index', autenticacion = self.__servicio_autenticacion, index_controller_log = index_controller_log), methods = ["GET", "POST"])
@@ -260,4 +289,28 @@ class Indexcontroller(MethodView):
         self.__controlador_log = index_controller_log
         self.__autenticacion = autenticacion
 ```
-Es necesario que herede la clase ``` MethodView ``` de Flask para hacerlos "classfull".
+Es necesario que herede la clase ``` MethodView ``` de Flask para hacerlos "classfull". Una vez instanciado el objeto se utilizan los metodos HTTP para las peticiones:
+```
+    def get(self):
+        self.__autenticacion.usuario_autenticado = False
+        return render_template(TEMPLATE_INDEX_CONSTANTE)
+```
+
+```
+    def post(self):
+        informacion_request = request.form
+        usuario_form = informacion_request.get("nombre")
+        contrasenia_form = informacion_request.get("contrasenia")
+        campos_vacios = self.__revisar_campos_vacios(informacion_request)
+        if (campos_vacios):
+            self.__controlador_log.warning_log("Se han encontrado campos vacios")
+            feedback = f"Campos vacios en {', '.join(campos_vacios)}"
+            return render_template(TEMPLATE_INDEX_CONSTANTE, feedback=feedback)
+        else:
+            autenticacion_aceptada = self.__autenticacion.comprobar_autenticacion(usuario_form, contrasenia_form)
+            if (autenticacion_aceptada):
+                return redirect(DIRECCION_PRINCIPAL_CONSTANTE)
+            else:
+                feedback = f"Credenciales no correctas"
+                return render_template(TEMPLATE_INDEX_CONSTANTE, feedback=feedback)
+```

@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, exists
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-import paramiko
 from sshtunnel import SSHTunnelForwarder
 from comun.singleton import Singleton
 from servicios.weblogging import Applogging
