@@ -22,6 +22,8 @@ sshtunnel==0.3.1 // instalar
 ## Servidor remoto Ubuntu-Server
 El servicio en cloud para base de datos escogido es una micro maquina virtual de AWS (Amazon Web Services), que es gratuito. A esta maquina virtual se le implementado un contenedor Docker con un servidor Mysql en su interior. En la carpeta aws-docker esta toda la configuracion utilizada. Mediante un docker-compose se pone en "Up" un contenedor linux que inyecta una configuracion previa, en este caso se crea una base de datos y usuario con acceso a ella.
 
+![Alt text](docs/docker-linux.jpg?raw=true "docker-linux")
+
 Para acceder al servidor remoto hace falta la clave privada que AWS te la proporciona por primera vez. Para conectarte por ssh:
 
 ```
