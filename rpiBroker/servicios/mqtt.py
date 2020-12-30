@@ -6,9 +6,8 @@ except:
 
 from servicios.weblogging import Applogging
 import json
-from comun.singleton import Singleton
 
-class Mqtt(metaclass=Singleton):
+class Mqtt:
 
     # En desarrollo
     def __init__(self):
@@ -17,5 +16,5 @@ class Mqtt(metaclass=Singleton):
     def __cofigurar_parametros_conexion_mqtt(self):
         print()
 
-    def on_message(self):
-        print()
+    def _on_message(self):
+        pass
