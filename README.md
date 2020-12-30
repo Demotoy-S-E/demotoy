@@ -1,6 +1,6 @@
 # demotoy
 ## Vision general
-![Alt text](docs/img.propuesta-proyecto-SE.jpg?raw=true "propuesta-proyecto-SE")
+![Alt text](docs/propuesta-proyecto-SE.jpg?raw=true "propuesta-proyecto-SE")
 ## Requisitos (28/12/20)
 ```
 click==7.1.2 
