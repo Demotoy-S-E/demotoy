@@ -2,6 +2,7 @@ from servicios.mqtt import Mqtt
 from servicios.weblogging import Applogging
 from comun.singleton import Singleton
 
+# Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
 class ClienteRPI2(Mqtt):
 
     __metaclass__= Singleton
