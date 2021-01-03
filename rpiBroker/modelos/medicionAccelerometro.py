@@ -10,6 +10,7 @@ class MAcelerometro(Base):
         self.eje_z = eje_z
         self.puerta_abierta = self.__verificar_si_esta_abierta()
 
+    # Sin implementar
     def __verificar_si_esta_abierta(self):
         return False
 
