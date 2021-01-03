@@ -23,22 +23,11 @@ class RpiLocal(metaclass=Singleton):
         self.__pin_calor = CALOR_PIN
         self.__comenzar_servicio_background()
 
-    def encender_calor(self):
-        try:
-            GPIO.output(self.__pin_calor, GPIO.HIGH)
-            time.sleep(1)
-            GPIO.output(self.__pin_calor, GPIO.OUT)
-        except:
-            self.__rpi_log.error_log("No se ha podido calentar")
-
     def __obtener_datos_rpi(self):
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())
-            self.__medir_temperatura_interna()
-            if (self.temperatura_cpu > 40 and self.parpadear == True):
-                self.__parpadear_led()
-            else:
-                self.__dejar_parpadear() 
+            """ Acelerometro """
+
         except:
             self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")
         with self.__hilo_datalock:
