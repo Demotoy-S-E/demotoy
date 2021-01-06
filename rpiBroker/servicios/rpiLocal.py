@@ -70,3 +70,5 @@ class RpiLocal(metaclass=Singleton):
     def __dejar_parpadear(self): 
         os.system('echo 0 >/sys/class/leds/led0/brightness')
         self.__rpi_log.info_log("Dejando de parpadear")
+
+    
