@@ -177,8 +177,12 @@ mma7660fc.interrupt_config()
 time.sleep(0.1)
  # -------------------------------
 
-def crear_json(eje_x, eje_y, eje_z):
+def crear_envar_json():
     print("Creado json")
+    accl = mma7660fc.read_accl()
+    eje_x = accl['x']
+    eje_y = accl['y']
+    eje_z = accl['z']
     mensaje= {
       "varx": eje_x,
       "vary": eje_y,
@@ -190,22 +194,4 @@ def crear_json(eje_x, eje_y, eje_z):
     else:
         print("Datos no publicados")
 
-pasos = 0
-while True :
-    print("Comenzando loop")
-    #mma7660fc.read_orientation()
-    #mma7660fc.read_shake()
-    accl = mma7660fc.read_accl()
-    print("Valores en g:")
-    print ("Acceleration in X-Axis : %f"%(accl['x']/21.33) + "g")
-    print ("Acceleration in Y-Axis : %f"%(accl['y']/21.33)+ "g")
-    print ("Acceleration in Z-Axis : %f"%(accl['z']/21.33)+ "g")
-    print (" ************************************* ")
-    eje_x = accl['x']
-    eje_y = accl['y']
-    eje_z = accl['z']
-    if (mma7660fc.contar_pasos(eje_x, eje_y, eje_z) == True):
-        pasos += 1
-    print(f"Pasos: {pasos}")
-    crear_json(eje_x, eje_y, eje_z)
-    time.sleep(20)
+
