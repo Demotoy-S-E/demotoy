@@ -2,16 +2,17 @@
 #     MQTT PUBLISHER DEMO 
 # -----------------------------------
 from servicios.weblogging import Applogging
-from static.constantes import TEMP_PIN
+from static.constantes import TEMP_PIN, VENTILADOR_PIN
 import paho.mqtt.publish as publish
 import json
 import smbus
-import math
+import servicios.dht_sensor
 import subprocess
 import dht_config
 import os
 import RPi.GPIO as GPIO
 import time
+import dht_sesn
 
 GPIO.setmode(GPIO.BCM)
 GPIO_sensor = TEMP_PIN
@@ -30,6 +31,8 @@ class Temperatura():
     def __init__(self):
         self.medir_temperatura()
         self.encender_ventilador()
+        self.__pin_ventilador = VENTILADOR_PIN
+        self.__rpi_log = Applogging("RPI")
 
 
     def medir_temperatura(self):
@@ -58,28 +61,7 @@ class Temperatura():
         else:
             print("Datos no publicados")    
 
-
-
-
-    temp = medir_temperatura()
-    print("La temperatura actual es: {0:.1f}".format(temp))
-
-    temp_adecuada = 21
-
-
-    while 1:
-        if temp < temp_adecuada:
-               print("Temperatura inferior a la adecuada")
-               print("Activando sistema de calefacción")
-
-        if temp > temp_adecuada:
-                print("Temperatura superior a la adecuada")
-                print("Activando el sistema de climatización")       
-                encender_ventilador()
-
-        crear_json(temp)        
-
-    GPIO.cleanup()
+    
 
 
 

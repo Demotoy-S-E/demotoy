@@ -1,5 +1,5 @@
-
 import comun.excepciones as excepciones
+
 try:
     import RPi.GPIO as GPIO
 except:
@@ -23,14 +23,26 @@ class RpiLocal(metaclass=Singleton):
         self.__hilo_rpi = threading.Thread()
         self.__comenzar_servicio_background()
         self.__pin_temperatura = TEMP_PIN
-        self.__pin_ventilador = VENTILADOR_PIN
-
+        
 
     def __obtener_datos_rpi(self):
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())
-            self.__temperatura = Temper.crear_json()
-            """ Temperatura"""
+            self.__temperatura = Temper.medir_temperatura()
+            temp = self.__temperatura = Temper.crear_json()
+            print("La temperatura actual es: {0:.1f}".format(temp))
+
+            temp_adecuada = 21
+
+            if temp < temp_adecuada:
+                print("Temperatura inferior a la adecuada")
+                print("Activando sistema de calefacción")
+
+            if temp > temp_adecuada:
+                print("Temperatura superior a la adecuada")
+                print("Activando el sistema de climatización")       
+                encender_ventilador()
+            GPIO.cleanup()
 
         except:
             self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")

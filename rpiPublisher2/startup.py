@@ -1,7 +1,7 @@
 from flask import _app_ctx_stack, jsonify
 from flask_cors import CORS
 from servicios.weblogging import Applogging
-from servicios.temper import Temperatura
+from servicios.Temper import Temperatura
 
 class Startup:
 
