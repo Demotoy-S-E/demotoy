@@ -14,7 +14,6 @@ import os
 import time
 import threading
 import atexit
-from servicios.mqtt import Mqtt
 from servicios.weblogging import Applogging
 from comun.singleton import Singleton
 from static.constantes import (
@@ -22,7 +21,6 @@ from static.constantes import (
     HOSTNAME_SIMULACION_LOCAL,
     HOSTNAME_RPI_1)
 
-# Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
 class ClienteRPI1:
 
     __metaclass__= Singleton
@@ -62,4 +60,3 @@ class ClienteRPI1:
             mensaje_recibido = msg.payload
             self.__cliente_log.info_log(msg.topic + " "+ mensaje_recibido)
             mensaje_recibido_json = json.loads(msg.payload )
-    

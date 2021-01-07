@@ -8,7 +8,6 @@ except:
     SIMULACION = True
 
 import json
-from servicios.mqtt import Mqtt
 from servicios.weblogging import Applogging
 from comun.singleton import Singleton
 from static.constantes import (
