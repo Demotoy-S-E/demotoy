@@ -9,26 +9,33 @@
 </head>
 
 <body>
-    <header >
-        <div class="fondo-encabezado" >
-            <div class="titulo">
-                <h1>Servicio Web</h1>
+        <header id="header" class="clear"> 
+            <div class="fondo-encabezado" >
+                <div class="botones-header">
+                <div id="group_cabecera">
             </div>
-        </div>    
-    </header>
+
+                <h2>Servicio Web</h2>
+            </div>    
+        </header>
 
 
     <main>
-        <div class="contenido-main" id="index-image">
+        <div>
             {% block contenido %}{% endblock %}
         </div>    
     </main>
 
 
-    <footer>
-        <div class="contenido-footer">
-            <p>Esto es un footer!</p>
-        </div>
-    </footer>
+
+    <div class="contenido-footer">
+        <footer id="copyright" class="clear">
+        <p class="foot_left">Copyright &copy; 2020 <a href="principal.html">RoboKat</a> | All Rights Reserved</p>
+        <p class="foot_right"><a href="www.facebook.com"><img src="images/face.png" width="35" alt="facebook"></a>
+                              <a href="www.twitter.com"><img src="images/twit.png" width="50" alt="twitter"></a> 
+                              <a href="www.instagram.com"><img src="images/inst.png" width="35" alt="instagram"></a>
+        </p>
+        </footer>
+    </div>
 </body>
 </html>
