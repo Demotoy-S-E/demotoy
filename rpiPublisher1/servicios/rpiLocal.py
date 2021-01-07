@@ -12,8 +12,8 @@ import threading
 import atexit
 from comun.singleton import Singleton
 from servicios.weblogging import Applogging
-from servicios.Acelerometro import *
-from static.constantes import SECUANCIA_SEGUNDOS_RPI, CALOR_PIN
+from servicios.acelerometro import *
+from static.constantes import SECUANCIA_SEGUNDOS_RPI, CALOR_PIN, VENTILADOR_PIN
 
 class RpiLocal(metaclass=Singleton):
     
@@ -29,15 +29,6 @@ class RpiLocal(metaclass=Singleton):
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())
             self.__acelerometro = Acelerometro.crear_envar_json()
-            if (self.temperatura_cpu > 40 and self.parpadear == True):
-                self.__parpadear_led()
-            else:
-                self.__dejar_parpadear() 
-        except:
-            self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")
-        with self.__hilo_datalock:
-            self.__hilo_rpi.start()
-
         except:
             self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")
         with self.__hilo_datalock:
