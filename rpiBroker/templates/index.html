@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 {% block titulo %}Index{% endblock %} 
 {% block contenido %}
-<div class="container">
-  <div class="row">
-    <div class="col">
+
+
+<div class="contenido-main" id="index-image">
+    <div id="articulo-index">
       <h2>Inicio Sesion</h2>
       <hr>
+
+    <div class="form-index">
       <form action="/" method="POST">
-        <div class="form-group">
+        <div id="form-group">
           <label>Username</label>
           <input type="text" class="form-control" id="username" name="nombre" placeholder="Introduce tu nombre de usuario">
         </div>
@@ -20,7 +23,10 @@
         <p class="text-danger float-right">{{ feedback }}</p>
         {% endif %}
       </form>
-      <form method="GET" action="/registro">
+    </div>
+
+
+      <form method="GET" action="/registro" class= "form-index">
           <button type="submit" >Registrarse</button>
         </form>
     </div>
