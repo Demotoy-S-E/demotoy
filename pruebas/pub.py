@@ -5,15 +5,14 @@
 #@Sistemas Embebidos. 2020
 # -----------------------------------
 
-from servicios.weblogging import Applogging
 import paho.mqtt.publish as publish
 import json
 import smbus
 import time
 import math
+from random import randrange
 
-
-topic = "deustoLab/aceleracion"
+topic = "demotoy/acelerometro"
 
 #Para la actividad 1: usad la IP de la RPi que actúa como broker
 # hostname = ""
@@ -69,7 +68,7 @@ MMA7660FC_AWSR_16                   = 0x08 # 16 Samples/Second Auto-Wake Mode
 MMA7660FC_AWSR_8                    = 0x10 # 8 Samples/Second Auto-Wake Mode
 MMA7660FC_AWSR_1                    = 0x18 # 1 Samples/Second Auto-Wake Mode
 
-class Acelerometro():
+class MMA7660FC():
     def __init__(self):
         self.mode_config()
         self.sample_rate_config()
@@ -170,30 +169,51 @@ class Acelerometro():
             return False
 
  # ------------INICIALIZACIÓN Y CONFIGURACIÓN DEL SENSOR ----------------
-mma7660fc = Acelerometro()
-mma7660fc.mode_config()
-time.sleep(0.1)
-mma7660fc.sample_rate_config()
-time.sleep(0.1)
-mma7660fc.interrupt_config()
-time.sleep(0.1)
+# mma7660fc = MMA7660FC()
+# mma7660fc.mode_config()
+# time.sleep(0.1)
+# mma7660fc.sample_rate_config()
+# time.sleep(0.1)
+# mma7660fc.interrupt_config()
+# time.sleep(0.1)
  # -------------------------------
 
-def crear_envar_json():
+def crear_json(eje_x, eje_y, eje_z):
     print("Creado json")
-    accl = mma7660fc.read_accl()
-    eje_x = accl['x']
-    eje_y = accl['y']
-    eje_z = accl['z']
     mensaje= {
       "varx": eje_x,
       "vary": eje_y,
       "varz": eje_z
     }
     mensaje_json= json.dumps(mensaje)
-    if (publish.single("deustoLab/aceleracion", mensaje_json, hostname=HOSTNAME)):
+    if (publish.single("demotoy/acelerometro", mensaje_json, hostname=HOSTNAME)):
         print("Done")
     else:
         print("Datos no publicados")
 
+def devolver_datos_fake():
+    xAccl = randrange(10)
+    yAccl = randrange(10)
+    zAccl = randrange(10)
+    return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
 
+pasos = 0
+while True :
+    print("Comenzando loop")
+    # mma7660fc.read_orientation()
+    # mma7660fc.read_shake()
+    # accl = mma7660fc.read_accl()
+    accl = devolver_datos_fake()
+    print("Valores en g:")
+    print ("Acceleration in X-Axis : %f"%(accl['x']/21.33) + "g")
+    print ("Acceleration in Y-Axis : %f"%(accl['y']/21.33)+ "g")
+    print ("Acceleration in Z-Axis : %f"%(accl['z']/21.33)+ "g")
+    print (" ************************************* ")
+    eje_x = accl['x']
+    eje_y = accl['y']
+    eje_z = accl['z']
+    # if (mma7660fc.contar_pasos(eje_x, eje_y, eje_z) == True):
+        # pasos += 1
+    # print(f"Pasos: {pasos}")
+    crear_json(eje_x, eje_y, eje_z)
+    time.sleep(5)

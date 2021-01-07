@@ -1,54 +1,65 @@
+
+SIMULACION = False
+
+import comun.excepciones as excepciones
+try:
+    import paho.mqtt.client as mqtt
+except:
+    excepciones.error_mosquito_import_log()
+    SIMULACION = True
+
+import json
+import subprocess
+import os
+import time
+import threading
+import atexit
 from servicios.mqtt import Mqtt
 from servicios.weblogging import Applogging
 from comun.singleton import Singleton
-
-topic = "deustoLab/aceleracion"
+from static.constantes import (
+    TOPIC_ACELEROMETRO, 
+    HOSTNAME_SIMULACION_LOCAL,
+    HOSTNAME_RPI_1)
 
 # Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
-class ClienteRPI1(Mqtt):
+class ClienteRPI1:
 
     __metaclass__= Singleton
 
     def __init__(self, nombre_log):
-        super(ClienteRPI1, self).__init__()
         self.__cliente_log = Applogging(nombre_log)
+        self.__hilo_datalock = threading.Lock()
+        self.__hilo_cliente_rpi = threading.Thread()
+        self.__comenzar_servicio_background()
+            
+    def __comenzar_servicio_background(self):
+        global SIMULACION
+        if (SIMULACION == False):
+            self.client = mqtt.Client()
+            self.__cliente_log.info_log(f"Configuracion client rpi1 {TOPIC_ACELEROMETRO}:{HOSTNAME_SIMULACION_LOCAL}")
+            self.client.on_connect = self._on_connect
+            self.client.on_message = self._on_message
+            self.client.connect(HOSTNAME_SIMULACION_LOCAL, 1883, 60)
+        self.__hilo_cliente_rpi = threading.Timer(0, self.__obtener_datos_cliente_mqtt, ())
+        self.__cliente_log.info_log("Servicio cliente mqtt 1 en el background...")
+        self.__hilo_cliente_rpi.start()
+
+    def __obtener_datos_cliente_mqtt(self):
+        self.__hilo_cliente_rpi = threading.Timer(0.1, self.__obtener_datos_cliente_mqtt, ())
+        if (SIMULACION == False):   
+            self.client.loop_forever()
+        with self.__hilo_datalock:
+            self.__hilo_cliente_rpi.start()
     
-# Callback que se llama cuando el cliente recibe el CONNACK del servidor 
-#Restult code 0 significa conexion sin errores
-    def on_connect(client, userdata, flags, rc):
-        print("Connected with result code "+str(rc))
- 
-    # Nos subscribirmos al topic 
-        client.subscribe(topic)
- #-----------------------------------------------   
-# Callback que se llama "automaticamente" cuando se recibe un mensaje del Publiser.
-    int varx_ = 0
-    def on_message(client, userdata, msg):
-        msg.payload = msg.payload.decode("utf-8")
-        mensaje_recibido = msg.payload
-        print(msg.topic+" "+mensaje_recibido)
+    def _on_connect(self, client, serdata, flags, rc):
+            global TOPIC_ACELEROMETRO
+            self.__cliente_log.info_log("Conectado como cliente mqtt, con codigo: " + str(rc))
+            client.subscribe(TOPIC_ACELEROMETRO)
 
-        #the message received starts with 'b, that mean bytes. 
-        mensaje_recibido_json =json.loads(msg.payload )
-        varx=mensaje_recibido_json["varx"]
-        
-        if( varx != varx_):
-            print("Se ha movido la puerta")
-        varx_ = varx
-
-    #-----------------------------------------------
-    # Creamos un cliente MQTT 
-    client = mqtt.Client()
-
-    #Definimos los callbacks para conectarnos y subscribirnos al topic
-    client.on_connect = on_connect
-    client.on_message = on_message
-
-    #Para la actividad 1: usad la IP de la RPi que actúa como broker
-    hostname ="169.254.28.119"
-
-    #Para la actividad 2: usad la IP del servidor gratutio de mosquitto
-    #hostname = "test.mosquitto.org"
+    def _on_message(self, client, userdata, msg):
+            msg.payload = msg.payload.decode("utf-8")
+            mensaje_recibido = msg.payload
+            self.__cliente_log.info_log(msg.topic + " "+ mensaje_recibido)
+            mensaje_recibido_json = json.loads(msg.payload )
     
-    client.connect(hostname, 1883, 60)
-    client.loop_forever()
