@@ -17,17 +17,13 @@ from static.constantes import (
     HOSTNAME_RPI_2)
 
 # Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
-class ClienteRPI2(Mqtt):
+class ClienteRPI2:
 
     __metaclass__= Singleton
 
     def __init__(self, nombre_log):
         global SIMULACION
         if (SIMULACION == False):
-            super(ClienteRPI2, self).__init__(
-                    cliente = self.cliente, 
-                    topic = TOPIC_TEMPERATURA,
-                    hostname = HOSTNAME_SIMULACION_LOCAL)
             self.cliente.on_connect = _on_connect()
             self.cliente.on_message = _on_message()
 

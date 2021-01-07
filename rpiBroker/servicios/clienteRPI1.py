@@ -23,7 +23,6 @@ from static.constantes import (
     HOSTNAME_RPI_1)
 
 # Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
-# class ClienteRPI1(Mqtt):
 class ClienteRPI1:
 
     __metaclass__= Singleton
