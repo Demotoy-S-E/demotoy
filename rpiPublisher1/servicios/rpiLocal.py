@@ -195,14 +195,14 @@ class RpiLocal(metaclass=Singleton):
         self.__rpi_log = Applogging("RPI")
         self.__hilo_datalock = threading.Lock()
         self.__hilo_rpi = threading.Thread()
-        self.__pin_acelerometro = CALOR_PIN
         self.__pin_ventilador = VENTILADOR_PIN
         self.__comenzar_servicio_background()
 
     def __obtener_datos_rpi(self):
+        self.crear_envar_json()
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())
-            self.crear_envar_json()
+            
         except:
             self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")
         with self.__hilo_datalock:
@@ -226,6 +226,7 @@ class RpiLocal(metaclass=Singleton):
 
     def crear_envar_json(self):
         global topic
+        global HOSTNAME
         print("Creado json")
         accl = self.__acelerometro.read_accl()
         eje_x = accl['x']
@@ -237,6 +238,7 @@ class RpiLocal(metaclass=Singleton):
         "varz": eje_z
         }
         mensaje_json= json.dumps(mensaje)
+        print(mensaje_json + topic + HOSTNAME)
         if (publish.single(topic, mensaje_json, hostname=HOSTNAME)):
             print("Done")
         else:
