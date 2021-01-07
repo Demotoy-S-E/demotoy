@@ -9,26 +9,30 @@
 </head>
 
 <body>
-    <header >
-        <div class="fondo-encabezado" >
-            <div class="titulo">
-                <h1>Servicio Web</h1>
+        <header id="header" class="clear"> 
+            <div class="fondo-encabezado" >
+                <div class="botones-header">
+                <div id="group_cabecera">
             </div>
-        </div>    
-    </header>
+
+                <h2>Servicio Web</h2>
+            </div>    
+        </header>
 
 
     <main>
-        <div class="contenido-main" id="index-image">
+        <div class="contenido-main">
             {% block contenido %}{% endblock %}
         </div>    
     </main>
 
 
-    <footer>
-        <div class="contenido-footer">
-            <p>Esto es un footer!</p>
-        </div>
-    </footer>
+
+    <div class="contenido-footer">
+        <footer id="copyright" class="clear">
+        <p class="foot_left">Copyright &copy; 2020 <a href="principal.html">Demotoy</a> | All Rights Reserved</p>
+        </p>
+        </footer>
+    </div>
 </body>
 </html>

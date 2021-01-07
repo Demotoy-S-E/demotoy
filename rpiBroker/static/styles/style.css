@@ -1,81 +1,194 @@
+html,
+    body {
+        height: 100%;
+        min-height: 100% !important;
+        background-color: #333;
+    }
+    
+    * {
+        box-sizing: border-box;
+        font-family: Trebuchet MS, Verdana, "sans-serif";
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+    
+    header {
+        height: 10%;
+        max-height: 67px;
+    }
+    
+    main {
+        height: 75%;
+    }
+    
+    footer {
+        min-height: 15%;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    header .fondo-encabezado {
+        background-color: #333;
+        width: 100%;
+        height: 100%;
+        display: inline-flex;
+        color: white;
+    }
+
+    .titulo {
+        padding-top: 14px;
+        margin: 0 auto; 
+    }
+    
+    .boton-encabezado {
+        width: 90px;
+        height: 30px;
+    }
+    
+    .botones-header {
+        margin-left: 50px;
+        padding-top: 15px; 
+        margin-right: 10px; 
+        justify-content: center;
+        width: 380px; 
+    }
+
+    #boton-form {
+        width: 90px;
+        height: 30px;
+    }
+    
+    .iconos {
+        display: inline-flex;
+        padding-top: 15px;
+    }
+    
+    .icono {
+        width: 40px;
+        height: 40px;
+        padding-right: 7px;
+    }
+    
+    .texto-encabezado {
+        text-align: left;
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-right: 30px;
+    }
+
+    #form-index {
+        padding-top: 50px;
+        padding-right: 50px;
+    }
+
+    #titulo-form {
+        text-align: center;
+    }
+    #articulo-lista-incidencias,
+    #articulo-index {
+        padding-top: 50px;
+        padding-right: 50px;
+        padding-left: 50px;
+        max-width: 600px;
+        margin-right: 300px;
+    }
+    
+    footer .contenido-footer {
+        box-sizing: border-box;
+        background-color: #333;
+        color: white;
+        width: 100%;
+        padding-top: 10px;
+        text-align: center;
+    }
+    
+    main .contenido-main {
+        width: 100%;
+        height: 100%;
+        display: inline-flex;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        color: #ffffb3;
+    }
+
+    #index-image {
+        background-image: url(https://png.pngtree.com/thumb_back/fw800/background/20190221/ourmid/pngtree-tech-line-background-simple-technology-business-image_22642.jpg);
+    }
+
+    #incidencias-image {
+        background-image: url(https://cdn.hipwallpaper.com/i/65/26/ZFbMTg.jpg);
+    }
+
+    #main-incidencias,
+    #nueva-image {
+        background-image: url(https://c1.wallpaperflare.com/preview/447/559/773/laser-cutting-machine-plasma.jpg);
+    }
+
+    #detalle-image {
+        background-image: url(https://www.findlight.net/blog/wp-content/uploads/2016/10/laser-marking.jpg);
+    }
 
 
-#header{padding:20px 0; background: none;}
-#group_cabecera{float:left; margin:0 0 20px 0;}
-#group_cabecera img {max-width:300px; background-color: none;}
-#group_cabecera h2{font-weight:normal;font-size:20px; font-family: sans-serif;
-font-style: oblique;}
-#group_cabecera h2 strong{font-weight:normal;font-size:26px; color: #c98301;}
+    #form-nueva-incidencia {
+        padding-top: 40px;
+        padding-right: 100px;
+        padding-left: 200px;
+        color: black;
+    }
 
+    #boton-form-incidencias {
+        width: 80px;
+        height: 30px;
+        background-color: #00e673;
+        color:black;
+    }
 
-#header nav{display:block; float:right; margin:10px 0 0 0; padding:20px 0; 
-           color:#C0BAB6; background-color:#ffffff62; border: 1px rgb(250, 155, 46)}
-#header ul{padding:0 20px;}
-#header li{display:inline; margin-right:25px; text-transform:uppercase;}
-#header li.last{margin-right:0;}
-#header li a{color:#C0BAB6;}
-#header li a:hover{color:#FF9900;}
+    #form-titulo-background,
+    #form-background {
+        color: #ffffb3;
+    }
 
+    #tabla-lista-incidencias {
+        color: #ffffb3;
+        background-color: #333;
+        padding: 10px;;
+        opacity: 0.8;
+    }
 
-.clear:after{
-    content:"."; 
-    display:block;  
-    clear:both; 
-    visibility:hidden; 
+    #tabla-lista-incidencias th,
+    #tabla-lista-incidencias p,
+    #tabla-lista-incidencias a,
+    #tabla-lista-incidencias img {
+        width: 110px;
+        text-align: center;
+        font-size: 14px;
+        padding: 2px;
+    }
+
+    #contenido-detalle-incidencias {
+        background-color: #333;
+        margin: 50px;
+        margin-right: 250px;
+        padding: 20px;
+        opacity: 0.8;
+        font-size: 14px;
+    }
+
+    #maquina-imagen {
+        height: 300px;;
+        width: 300px;
     } 
 
-div.base{
-    display:block; 
-    width:100%; 
-    margin:0; 
-    padding:0; 
-    text-align:left;
-    }    
-
-.acceso{
-    display:block; 
-    float:left; 
-    margin:0 30px 0 0; 
-       }
-
-.last{margin-right:0;} 
-
-
-body{
-    margin:0; 
-    padding:0; 
-    font-size:13px; 
-    font-family:Georgia, "Times New Roman", Times, serif; 
-    color:#919191;
-    }  
-    
-#submit{background-color: rgb(224, 139, 41); color: cornsilk;
-
-}
-
-
-/* GENERAL*/
-#header, #contenido, #footer, #body,#copyright{display:block; width:960px; margin:0 auto;}
-h1 {font-family: Calibri;font-size:30px; color: #636260; padding-top: 30px;}
-h1 strong{font-size:30px; color: #d89313;}
-h2{font-weight:normal; font-style:italic; line-height:normal;}
-article, figure, footer, header, nav, section{display:block;}
-
-.cabecera, .cabecera a{color:#C0BAB6; background: url(https://image.freepik.com/vector-gratis/conexion-internet-sentido-abstracto-ciencia-fondo_41981-1306.jpg);}   
-.row4, .row4 a{color:#919191; background: url(https://image.freepik.com/vector-gratis/conexion-internet-sentido-abstracto-ciencia-fondo_41981-1306.jpg);}
-.row2{color:#353434; background-color:#FFFFFF; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;}
-
-
-
-/* FOOTEER */
-.base #copyright{padding:30px 0; font-size:12px; line-height:1.4em; background:none;}
-
-
-/* CONTACTO FOOTER */
-
-#copyright{padding:20px 0;}
-#copyright p{margin:0; padding: 0;}
-#copyright a{color:#FF9900;}
-
-.foot_left{float:left;}
-.foot_right{float:right;}
+    #contenido-sidebar-foto {
+        background-color: #333;
+        margin: 50px;
+        margin-top: 100px;
+        padding: 20px;
+        opacity: 0.8;
+    }
