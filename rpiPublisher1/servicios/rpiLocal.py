@@ -12,7 +12,8 @@ import threading
 import atexit
 from comun.singleton import Singleton
 from servicios.weblogging import Applogging
-from servicios.acelerometro import *
+import servicios.acelerometro
+from servicios.acelerometro import Acelerometro
 from static.constantes import SECUANCIA_SEGUNDOS_RPI, CALOR_PIN, VENTILADOR_PIN
 
 class RpiLocal(metaclass=Singleton):
@@ -28,7 +29,14 @@ class RpiLocal(metaclass=Singleton):
     def __obtener_datos_rpi(self):
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())
-            self.__acelerometro = Acelerometro.crear_envar_json()
+            self.__acelerometro = Acelerometro()
+            self.__acelerometro.mode_config()
+            time.sleep(0.1)
+            self.__acelerometro.sample_rate_config()
+            time.sleep(0.1)
+            self.__acelerometro.interrupt_config()
+            time.sleep(0.1)
+            self.__acelerometrO.crear_envar_json()
         except:
             self.__rpi_log.error_log("No se ha podido obtener datos de la rpi")
         with self.__hilo_datalock:
