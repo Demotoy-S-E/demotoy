@@ -13,7 +13,10 @@ import atexit
 from comun.singleton import Singleton
 from servicios.weblogging import Applogging
 from servicios.Temper import *
-from static.constantes import SECUANCIA_SEGUNDOS_RPI, TEMP_PIN, VENTILADOR_PIN
+from static.constantes import (
+    SECUANCIA_SEGUNDOS_RPI, 
+    TEMP_PIN, 
+    VENTILADOR_PIN)
 
 class RpiLocal(metaclass=Singleton):
     
@@ -24,7 +27,6 @@ class RpiLocal(metaclass=Singleton):
         self.__comenzar_servicio_background()
         self.__pin_temperatura = TEMP_PIN
         
-
     def __obtener_datos_rpi(self):
         try:
             self.__hilo_rpi = threading.Timer(SECUANCIA_SEGUNDOS_RPI, self.__obtener_datos_rpi, ())

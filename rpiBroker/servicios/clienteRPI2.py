@@ -43,7 +43,7 @@ class ClienteRPI2:
             self.client.on_message = self._on_message
             self.client.connect(HOSTNAME_SIMULACION_LOCAL, 1883, 60)
         self.__hilo_cliente_rpi = threading.Timer(0, self.__obtener_datos_cliente_mqtt, ())
-        self.__cliente_log.info_log("Servicio cliente mqtt 1 en el background...")
+        self.__cliente_log.info_log("Servicio cliente mqtt 2 en el background...")
         self.__hilo_cliente_rpi.start()
 
     def __obtener_datos_cliente_mqtt(self):
@@ -63,20 +63,16 @@ class ClienteRPI2:
         mensaje_recibido = msg.payload
         self.__cliente_log.info_log(msg.topic + " "+ mensaje_recibido)
         mensaje_recibido_json = json.loads(msg.payload)
-        varx = mensaje_recibido_json["varx"]
-        vary = mensaje_recibido_json["vary"]
-        varz = mensaje_recibido_json["varz"]
-        self.__insert_medicion_accel(
-            var_x = varx,
-            var_y = vary,
-            var_z = varz)
+        valor_temperatura = mensaje_recibido_json["Temperatura"]
+        self.__insert_medicion_temperatura(
+            temperatura = valor_temperatura)
 
-    def __insert_medicion_accel(self, var_x, var_y, var_z):
+    def __insert_medicion_temperatura(self, temperatura):
         self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
         fecha_actual = datetime.now()
         self.__cliente_log.info_log(fecha_actual)
         nueva_medicion = MTemperaturaExterna(
             fecha = fecha_actual,
-            )
+            temperatura_ambiente = temperatura)
         self.__sesion.add(nueva_medicion)
         self.__sesion.commit()
