@@ -83,6 +83,8 @@ html,
     #form-index {
         padding-top: 50px;
         padding-right: 50px;
+        display: block;
+        
     }
 
     #titulo-form {
@@ -142,12 +144,7 @@ html,
         color: black;
     }
 
-    #boton-form-incidencias {
-        width: 80px;
-        height: 30px;
-        background-color: #00e673;
-        color:black;
-    }
+
 
     #form-titulo-background,
     #form-background {
@@ -192,3 +189,28 @@ html,
         padding: 20px;
         opacity: 0.8;
     }
+
+    #tituli {
+        background: linear-gradient(135deg, #6A8FF0 0%, #5f387b 100%);
+        color: white;
+        font-size: 24px;
+        text-align: center;
+        width: 50%;
+        margin: 10px;
+        padding: 10px;
+        
+    }
+
+    #form-label{
+        color:rgb(255, 255, 255); 
+    }
+
+    #boton {
+        width: 80px;
+        height: 50%;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #6A8FF0 0%, #5e16d1 100%);
+        color: white;
+
+    }
+
