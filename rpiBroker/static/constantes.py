@@ -27,3 +27,11 @@ SECUANCIA_SEGUNDOS_RPI = 10
 
 # Rpi pins
 BUZZER_PIN = 17
+
+# MQTT TOPIC
+TOPIC_ACELEROMETRO = "demotoy/acelerometro"
+TOPIC_TEMPERATURA = "demotoy/temperatura"
+
+HOSTNAME_SIMULACION_LOCAL = "test.mosquitto.org"
+HOSTNAME_RPI_1 = ""
+HOSTNAME_RPI_2 = ""
