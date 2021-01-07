@@ -4,12 +4,14 @@
 #@Laura Arjona
 #@Sistemas Embebidos. 2020
 # -----------------------------------
+
 from servicios.weblogging import Applogging
 import paho.mqtt.publish as publish
 import json
 import smbus
 import time
 import math
+
 
 topic = "deustoLab/aceleracion"
 

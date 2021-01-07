@@ -8,7 +8,7 @@ class ClienteRPI2(Mqtt):
     __metaclass__= Singleton
 
     def __init__(self, nombre_log):
-        super(ClienteRPI2, self).__init__()
+        super(ClienteRPI2, self).__init__(nombre = "asier")
         self.__cliente_log = Applogging(nombre_log)
 
     def _on_message(self):

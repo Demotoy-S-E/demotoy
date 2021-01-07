@@ -11,11 +11,11 @@ import json
 class Mqtt:
 
     # En desarrollo
-    def __init__(self):
-        self.__cofigurar_parametros_conexion_mqtt()
+    def __init__(self, nombre):
+        self.__cofigurar_parametros_conexion_mqtt(nombre)
 
-    def __cofigurar_parametros_conexion_mqtt(self):
-        print()
+    def __cofigurar_parametros_conexion_mqtt(self, nombre):
+        print(nombre)
 
     def _on_message(self):
         pass
