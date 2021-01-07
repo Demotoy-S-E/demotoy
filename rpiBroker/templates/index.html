@@ -5,30 +5,30 @@
 
 <div class="contenido-main" id="index-image">
     <div id="articulo-index">
-      <h2>Inicio Sesion</h2>
-      <hr>
-
-    <div id="form-index">
+    <div id = "form-index">
       <form action="/" method="POST">
+        <h2 id = "form-label" text-align="right">Log In</h2>
+        <br>
         <div id="form-group">
-          <label>Username: </label>
-          <input type="text" class="form-control" id="username" name="nombre" placeholder="Introduce tu nombre de usuario">
+          <label id="form-label">Username: </label>
+          <input type="text" class="form-control" id="username" name="nombre" placeholder="Usuario">
         </div>
+        <br>
         <div class="form-group">
-          <label>Password: </label>
-          <input type="password" class="form-control" id="password" name="contrasenia" placeholder="Contrasena">
+          <label id="form-label">Password: </label>
+          <input type="password" class="form-control" id="password" name="contrasenia" placeholder="Contraseña">
         </div>
-        <button type="submit" class="btn btn-primary">Sign up</button>
+        <br>
+        <button type="submit" id="boton">Sing In</button>
         {% if feedback %}
         <p class="text-danger float-right">{{ feedback }}</p>
         {% endif %}
-      </form>
-    </div>
-
-
+    
       <form method="GET" action="/registro" id= "form-index">
-          <button type="submit" >Registrarse</button>
-        </form>
+          <button id = "boton" type="submit" >Registro</button>
+      </form>
+    </form>
+      </div>  
     </div>
   </div>
 </div>
