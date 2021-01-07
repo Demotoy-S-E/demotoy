@@ -4,14 +4,19 @@
 #@Laura Arjona
 #@Sistemas Embebidos. 2020
 # -----------------------------------
+SIMULACION = False
 
-from servicios.weblogging import Applogging
-import paho.mqtt.publish as publish
-import json
-import smbus
-import time
-import math
-
+import comun.excepciones as excepciones
+try:
+    from servicios.weblogging import Applogging
+    import paho.mqtt.publish as publish
+    import json
+    import smbus
+    import time
+    import math
+except:
+    excepciones.error_mosquito_import_log()
+    SIMULACION = True
 
 topic = "deustoLab/aceleracion"
 

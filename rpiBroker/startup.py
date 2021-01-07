@@ -66,7 +66,7 @@ class Startup:
     def __add_servicio_cliente_rpi1(self):
         self.__log_startup.info_log("Iniciando servicio cliente RPi1..")
         nombre_log = "RPI1"
-        self.__servicioRPi1 = ClienteRPI1(nombre_log)
+        self.__servicioRPi1 = ClienteRPI1(nombre_log = nombre_log, servicio_db = self.__servicio_db)
 
     """ Aqui se aniade el metodo para cliente RPI2 """
     def __add_servicio_cliente_rpi2(self):
