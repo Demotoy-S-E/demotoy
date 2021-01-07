@@ -13,6 +13,7 @@ from modelos import medicionAccelerometro
 from servicios.clienteRPI1 import ClienteRPI1
 from servicios.clienteRPI2 import ClienteRPI2
 from servicios.rpiLocal import RpiLocal
+from servicios.api import Api
 
 pymysql.install_as_MySQLdb() # hay un error con el paquete principal de mysqlclient, utilizo esta linea para obligar utilizar este paquete
 
@@ -26,6 +27,7 @@ class Startup:
         self.__servicioRPi1 = None
         self.__servicioRPi2 = None
         self.__servicio_rpi_local = None
+        self.__api = None
         self.__inyeccion_dependencias()
 
     def __inyeccion_dependencias(self):
@@ -56,11 +58,17 @@ class Startup:
 
         index_controller_log = Applogging("Controlador Index")
         self.__app.add_url_rule('/', endpoint = 'index', view_func = Indexcontroller.as_view(
-            'index', autenticacion = self.__servicio_autenticacion, index_controller_log = index_controller_log), methods = ["GET", "POST"])
+            'index', 
+            autenticacion = self.__servicio_autenticacion, 
+            index_controller_log = index_controller_log), 
+            methods = ["GET", "POST"])
 
         registro_controller_log = Applogging("Controlador Registro")
         self.__app.add_url_rule('/registro', endpoint = 'registro', view_func = Registrocontroller.as_view(
-            'registro', autenticacion = self.__servicio_autenticacion, registro_controller_log = registro_controller_log), methods = ["GET", "POST"])
+            'registro', 
+            autenticacion = self.__servicio_autenticacion, 
+            registro_controller_log = registro_controller_log), 
+            methods = ["GET", "POST"])
 
     """ Aqui se aniade el metodo para cliente RPI1 """
     def __add_servicio_cliente_rpi1(self):
@@ -75,9 +83,18 @@ class Startup:
         self.__servicioRPi2 = ClienteRPI2(nombre_log = nombre_log, servicio_db = self.__servicio_db)
 
     def __add_controller_principal(self):
-        self.__log_startup.info_log("Iniciando servicio rpi...")
+        self.__log_startup.info_log("Iniciando servicio rpi local y api...")
         self.__servicio_rpi_local = RpiLocal()
+        self.__api = Api()
 
         principal_controller_log = Applogging("Controlador Principal")
         self.__app.add_url_rule('/principal', endpoint = 'principal', view_func = Principalcontroller.as_view(
-            'principal', autenticacion = self.__servicio_autenticacion, rpi_local = self.__servicio_rpi_local, principal_controller_log = principal_controller_log), methods = ["GET", "POST"])
+            'principal', 
+            autenticacion = self.__servicio_autenticacion, 
+            rpi_local = self.__servicio_rpi_local, 
+            principal_controller_log = principal_controller_log,
+            api = self.__api), 
+            methods = ["GET", "POST", "PUT"])
+
+    def __add_controller_monitorizacion(self):
+        print()

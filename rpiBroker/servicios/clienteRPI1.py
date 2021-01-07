@@ -73,7 +73,6 @@ class ClienteRPI1:
     def __insert_medicion_accel(self, var_x, var_y, var_z):
         self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
         fecha_actual = datetime.now()
-        self.__cliente_log.info_log(fecha_actual)
         nueva_medicion = MAcelerometro(
             fecha = fecha_actual,
             eje_x = var_x,

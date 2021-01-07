@@ -37,8 +37,8 @@ class Registrocontroller(MethodView):
             if (usuario_creado):
                 return render_template(TEMPLATE_INDEX_CONSTANTE)
             else:
-                feedback = self.__registro_log.error_feeddback("El usuario no es correcto o ya existe")
-                return render_template(TEMPLATE_REGISTRO_CONSTANTE)
+                feedback = f"El usuario {nombre_form} no es correcto o ya existe"
+                return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)
 
     def __revisar_campos_vacios(self, informacion_request):
         campos_requeridos = []

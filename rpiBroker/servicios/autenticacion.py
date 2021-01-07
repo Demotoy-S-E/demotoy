@@ -12,6 +12,7 @@ class Autenticacion(metaclass=Singleton):
         self.__sesion = servicio_db.sesion
         self.usuario_autenticado = False
         self.ultima_autenticacion = None
+        self.usuario = None
 
     def crear_usuario(self, nombre_form, email_form, contrasenia_form, nombre_completo_form, numero_form, direccion_form) -> bool:
         try:
@@ -46,6 +47,7 @@ class Autenticacion(metaclass=Singleton):
                     return self.usuario_autenticado
                 elif (usuario.get_contrasenia() == contrasenia_form):
                     self.usuario_autenticado = True
+                    self.usuario = usuario
                     self.__autenticacion_log.info_log("Usuario autenticado")
                     self.ultima_autenticacion = time.time()
                     return self.usuario_autenticado

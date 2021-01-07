@@ -6,39 +6,35 @@
     <div class="col">
       <h2>Inicio Sesion</h2>
       <p>Temperatura CPU: {{ cpu }}</p>
-      <p>Temperatura Sensor: {{ temperatura_externa }}</p>
       <form action="/" method="GET">
         <button type="submit" class="btn btn-primary">Log out</button>
       </form>
       <form action="/principal" method="POST">
-        <button type="submit" class="btn btn-primary">Apagar luz</button>
-      </form>
-      <form action="/principal" method="POST">
         <div class="form-group">
           <label>Username</label>
-          <input type="text" class="form-control" id="username" name="nombre" placeholder="Introduce tu nombre de usuario">
+          <input type="text" class="form-control" id="username" name="nombre" value = {{ usuario.nombre }}>
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu email">
+          <input type="email" class="form-control" id="email" name="email" value = {{ usuario.email }}>
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" class="form-control" id="password" name="contrasenia" placeholder="Contrasenia">
+          <input type="password" class="form-control" id="password" name="contrasenia" value = {{ contrasenia }}>
         </div>
         <div class="form-group">
           <label>Nombre completo</label>
-          <input type="text" class="form-control" id="password" name="nombre_completo" placeholder="Nombre completo">
+          <input type="text" class="form-control" id="password" name="nombre_completo" value = {{ usuario.nombre_completo }}>
         </div>
         <div class="form-group">
           <label>Numero telefono</label>
-          <input type="text" class="form-control" id="password" name="numero_telefono" placeholder="Numero">
+          <input type="text" class="form-control" id="password" name="numero_telefono" value = {{ usuario.numero_telefono }}>
         </div>
         <div class="form-group">
           <label>Direccion</label>
-          <input type="text" class="form-control" id="password" name="direccion" placeholder="Direccion Ej; Calle Kutxi..N*2">
+          <input type="text" class="form-control" id="password" name="direccion" value = {{ usuario.direccion }}>
         </div>
-        <button type="submit" >Registrarse</button>
+        <button type="submit" >Modificar cuenta</button>
         {% if feedback %}
         <p class="text-danger float-right">{{ feedback }}</p>
         {% endif %}

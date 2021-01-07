@@ -35,6 +35,7 @@ class MysqlDB(metaclass=Singleton):
             id = self.engine.execute("SELECT id FROM domotoyawsdatabase.usuario").first()
             return self.sesion
         except:
+            self.__server_ssh = self.__tunel_ssh()
             self.__server_ssh.start()
             self.__mysql_log.warning_log("La sesion ha caducado o ha habido un problema inesperado")
             self.__crear_conexion()

@@ -7,9 +7,6 @@ class Api:
     def __init__(self):
         print()
 
-    def obtener_usuario_autenticado(self):
-        print()
-
     def modificar_usuario(self):
         print()
 
