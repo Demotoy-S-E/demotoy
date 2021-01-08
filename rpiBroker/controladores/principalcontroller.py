@@ -29,7 +29,7 @@ class Principalcontroller(MethodView):
             return redirect(DIRECCION_INDEX_CONSTANTE)
 
     def post(self):
-        self.__rpi_local.parpadear = False # Proxima iteracion del servicio se apaga
+        # Proxima iteracion del servicio se apaga
         informacion_request = request.form
         nombre_form = informacion_request.get("nombre")
         email_form = informacion_request.get("email")
@@ -52,3 +52,10 @@ class Principalcontroller(MethodView):
                 direccion_form = direccion_form)
             self.__api.modificar_usuario(usuario_creado)
             return redirect(TEMPLATE_PRINCIPAL_CONSTANTE)
+            
+    def __revisar_campos_vacios(self, informacion_request):
+        campos_requeridos = []
+        for k, v in informacion_request.items():
+            if v == "":
+                campos_requeridos.append(k)
+        return campos_requeridos
