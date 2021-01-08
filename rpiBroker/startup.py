@@ -97,4 +97,10 @@ class Startup:
             methods = ["GET", "POST", "PUT"])
 
     def __add_controller_monitorizacion(self):
-        print()
+        monitorizacion_controller_log = Applogging("Controlador Principal")
+        self.__app.add_url_rule('/monitorizacion', endpoint = 'monitorizacion', view_func = Principalcontroller.as_view(
+            'monitorizacion', 
+            autenticacion = self.__servicio_autenticacion, 
+            principal_controller_log = monitorizacion_controller_log,
+            api = self.__api), 
+            methods = ["GET", "POST"])

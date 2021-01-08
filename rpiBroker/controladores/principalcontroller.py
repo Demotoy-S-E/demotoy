@@ -33,7 +33,6 @@ class Principalcontroller(MethodView):
         informacion_request = request.form
         nombre_form = informacion_request.get("nombre")
         email_form = informacion_request.get("email")
-        contrasenia_form = informacion_request.get("contrasenia")
         nombre_completo_form = informacion_request.get("nombre_completo")
         numero_form = informacion_request.get("numero_telefono")
         direccion_form = informacion_request.get("direccion")
@@ -43,15 +42,14 @@ class Principalcontroller(MethodView):
             feedback = f"Campos vacios en {', '.join(campos_vacios)}"
             return render_template(TEMPLATE_PRINCIPAL_CONSTANTE, feedback=feedback)
         else:
-            usuario_creado = self.__autenticacion.crear_usuario(
-                nombre_form = nombre_form, 
-                email_form = email_form, 
-                contrasenia_form = contrasenia_form,
-                nombre_completo_form = nombre_completo_form,
-                numero_form = numero_form,
-                direccion_form = direccion_form)
-            self.__api.modificar_usuario(usuario_creado)
-            return redirect(TEMPLATE_PRINCIPAL_CONSTANTE)
+            self.__api.modificar_usuario(
+                id = self.__servicio_autenticacion.usuario.id,
+                nombre = nombre_form,
+                email = email_form,
+                nombre_completo = nombre_completo_form,
+                numero_telefono = numero_form,
+                direccion = direccion_form)
+            return redirect(DIRECCION_PRINCIPAL_CONSTANTE)
             
     def __revisar_campos_vacios(self, informacion_request):
         campos_requeridos = []

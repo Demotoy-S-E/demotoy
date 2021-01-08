@@ -38,7 +38,7 @@ class ClienteRPI2:
         global DEBUG
         if (DEBUG == False):
             self.client = mqtt.Client()
-            self.__cliente_log.info_log(f"Configuracion client rpi1 {TOPIC_TEMPERATURA}:{HOSTNAME_SIMULACION_LOCAL}")
+            self.__cliente_log.info_log(f"Configuracion client rpi2 {TOPIC_TEMPERATURA}:{HOSTNAME_SIMULACION_LOCAL}")
             self.client.on_connect = self._on_connect
             self.client.on_message = self._on_message
             self.client.connect(HOSTNAME_SIMULACION_LOCAL, 1883, 60)

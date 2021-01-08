@@ -32,11 +32,6 @@
         </div>
         <br>
         <div class="form-group">
-          <label id="form-label">Contraseña</label>
-          <input type="password" class="form-control" name="contrasenia" value={{ contrasenia }}>
-        </div>
-        <br>
-        <div class="form-group">
           <label id="form-label">Nombre completo</label>
           <input type="text" class="form-control" name="nombre_completo" value={{ usuario.nombre_completo }}>
         </div>
@@ -48,7 +43,7 @@
         <br>
         <div class="form-group">
           <label id="form-label">Direccion</label>
-          <input type="text"  class="form-control" value={{ usuario.direccion }}>
+          <input type="text"  class="form-control" name="direccion" value={{ usuario.direccion }}>
         </div>
         <br>
         <button type="submit" id="boton">Modificar cuenta</button>
