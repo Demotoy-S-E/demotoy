@@ -87,7 +87,7 @@ skip-name-resolve
 bind-address=0.0.0.0
 ```
 ## Servicios
-
+![Alt text](docs/diseño-arquitectura.png?raw=true "diseño")
 ### Inyeccion de dependencias (startup.py)
 Es el punto de inicio de la aplicacion. Se definen los objetos que se van a instanciar, todos los servicios:
 
@@ -275,7 +275,7 @@ self.__clave = Fernet.generate_key()
 3. Se encripta un objeto tipo token mediante esa clave y la contraseña. 
 4. Ambas columnas son de tipo binarios (BLOB en mysql).
 5. Para obtener la contraseña a la hora de comparar credenciales, mediante la funcion get_contrasenia() se desencripta el token para obtener el string.
-
+![Alt text](docs/diagrama.png?raw=true "estructura-datos")
 ## Controladores
 
 Definicion (rounting):
