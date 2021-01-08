@@ -1,8 +1,9 @@
 from servicios.weblogging import Applogging
 import json
 from modelos.usuario import Usuario
+from modelos.medicionAccelerometro import MAcelerometro
+from modelos.medicionTempemperaturaExterna import MTemperaturaExterna
 
-# Para enterder esto: https://stackoverflow.com/questions/3277367/how-does-pythons-super-work-with-multiple-inheritance
 class Api:
 
     def __init__(self, servicio_db):
@@ -21,7 +22,13 @@ class Api:
         self.__sesion.commit()
 
     def obtener_ultimas_mediciones_accel(self):
-        print()
+        self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
+        mediciones = self.__sesion.query(MAcelerometro).filter_by().all()
+        self.__sesion.commit()
+        return mediciones
 
     def obtener_ultimas_mediciones_temperatura_externa(self):
-        print()
+        self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
+        mediciones = self.__sesion.query(MTemperaturaExterna).filter_by().all()
+        self.__sesion.commit()
+        return mediciones

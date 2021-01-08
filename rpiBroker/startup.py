@@ -3,6 +3,7 @@ import pymysql
 from controladores.indexcontroller import Indexcontroller
 from controladores.registrocontroller import Registrocontroller
 from controladores.principalcontroller import Principalcontroller
+from controladores.monitorizacioncontroller import Monitorizacioncontroller
 from servicios.weblogging import Applogging
 from servicios.mysqlDB import MysqlDB
 from servicios.autenticacion import Autenticacion
@@ -37,6 +38,7 @@ class Startup:
         self.__add_servicio_cliente_rpi1()
         self.__add_servicio_cliente_rpi2()
         self.__add_controller_principal()
+        self.__add_controller_monitorizacion()
 
     def __add_servicio_db(self):
         try: 
@@ -98,9 +100,9 @@ class Startup:
 
     def __add_controller_monitorizacion(self):
         monitorizacion_controller_log = Applogging("Controlador Principal")
-        self.__app.add_url_rule('/monitorizacion', endpoint = 'monitorizacion', view_func = Principalcontroller.as_view(
+        self.__app.add_url_rule('/monitorizacion', endpoint = 'monitorizacion', view_func = Monitorizacioncontroller.as_view(
             'monitorizacion', 
             autenticacion = self.__servicio_autenticacion, 
-            principal_controller_log = monitorizacion_controller_log,
+            monitorizacion_controller_log = monitorizacion_controller_log,
             api = self.__api), 
             methods = ["GET", "POST"])

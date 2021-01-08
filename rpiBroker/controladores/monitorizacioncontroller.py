@@ -14,8 +14,7 @@ class Monitorizacioncontroller(MethodView):
         self.__api = api
 
     def get(self):
-        if (self.__servicio_autenticacion.usuario_autenticado == True):
-            contrasenia_usuario = self.__servicio_autenticacion.usuario.get_contrasenia()
+        if (self.__autenticacion.usuario_autenticado == True):
             mediciones_temperatura = self.__api.obtener_ultimas_mediciones_temperatura_externa()
             mediciones_accel = self.__api.obtener_ultimas_mediciones_accel()
             templateData = {
