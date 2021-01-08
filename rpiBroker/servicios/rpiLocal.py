@@ -2,6 +2,7 @@
 import comun.excepciones as excepciones
 try:
     import RPi.GPIO as GPIO
+    import smbus2
 except:
     excepciones.error_gpio_import_log()
 
