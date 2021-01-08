@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block titulo %}Index{% endblock %} 
+{% block titulo %}Index{% endblock %}
 {% block contenido %}
 
 
 <div class="contenido-main" id="index-image">
-    <div id="articulo-index">
-    <div id = "form-index">
+  <div id="articulo-index">
+    <div id="form-index">
       <form action="/" method="POST">
-        <h2 id = "form-label" text-align="right">Log In</h2>
+        <h2 id="form-label" text-align="right">Log In</h2>
         <br>
         <div id="form-group">
           <label id="form-label">Username: </label>
@@ -23,12 +23,14 @@
         {% if feedback %}
         <p class="text-danger float-right">{{ feedback }}</p>
         {% endif %}
-      </form>
+      
       <form method="GET" action="/registro" id= "form-index">
             <button id = "boton" type="submit" >Registro</button>
       </form>
+    </form>
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
 
