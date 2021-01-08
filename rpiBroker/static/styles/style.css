@@ -127,8 +127,8 @@ html,
         background-image: url(https://png.pngtree.com/thumb_back/fw800/background/20190221/ourmid/pngtree-tech-line-background-simple-technology-business-image_22642.jpg);
     }
 
-    #incidencias-image {
-        background-image: url(https://cdn.hipwallpaper.com/i/65/26/ZFbMTg.jpg);
+    #prin-image {
+        background-image: url(https://image.freepik.com/free-vector/business-data-analytics-robotic-process-automation-concept-virtual-screen-wireframed-cyborg-hand-touching-digital-interface_127544-1149.jpg);
     }
 
     #main-incidencias,
@@ -195,7 +195,7 @@ html,
     }
 
     #tituli {
-        color: linear-gradient(135deg, #6A8FF0 0%, #5f387b 100%);
+        color:rgb(255, 255, 255);
         font-size: 28px;
         text-align: center;
     }
@@ -227,3 +227,55 @@ html,
 		color: rgb(100, 48, 136);
 		}
 
+        #nav {
+            text-align: center;
+            height: 4.25em;
+            cursor: default;
+    
+        }
+    
+        #nav a {
+    
+            position: relative;
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            line-height: 0.9em;
+            font-size: 2.5em;
+            margin: 0 0.25em 0 0.25em;
+            opacity: 0.35;
+            outline: 0;
+            -moz-transition: opacity .25s ease-in-out;
+            -webkit-transition: opacity .25s ease-in-out;
+            -ms-transition: opacity .25s ease-in-out;
+            transition: opacity .25s ease-in-out;
+        }
+    
+    
+    
+        #nav a span {
+            display: block;
+            position: absolute;
+            background: #222222;
+            color: #ffffff;
+            top: -2.75em;
+            font-size: 0.3em;
+            height: 2.25em;
+            line-height: 2.25em;
+            left: 50%;
+            opacity: 0;
+            -moz-transition: opacity .25s ease-in-out;
+            -webkit-transition: opacity .25s ease-in-out;
+            -ms-transition: opacity .25s ease-in-out;
+            transition: opacity .25s ease-in-out;
+            width: 5.5em;
+            margin-left: -2.75em;
+            }
+    
+            #nav a:hover span {
+                opacity: 1.0;
+                color:#F402A3 ;
+            }
+    
+    
+    
