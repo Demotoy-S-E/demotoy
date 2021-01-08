@@ -8,9 +8,12 @@
     <div id="articulo-index">
         <h2 id="form-label">Monitorizacion</h2>
 
-<table class="tabla">
+
+<section id="productos" class="clear">    
+<article class="productos">       
+<table class="tabla1">
     <colgroup>
-             <col span="4">
+             <col span="5">
          <thead>
              <tr>
                  <td>Fecha</td>
@@ -23,50 +26,39 @@
              <tr>
                  <td>{{temp.fecha}}</td>
                  <td>{{temp.temperatura_ambiente}}</td>
-                 <td><a id="eliminar">
-                         <img src="https://static.vecteezy.com/system/resources/previews/000/442/652/non_2x/delete-vector-icon.jpg" width="38px">
-                 </a></td>
-                 <td><a id="editar"></a>
-                         <img src="https://png.pngtree.com/png-clipart/20190630/original/pngtree-vector-pencil-icon-png-image_4152536.jpg" width="35px">
-                 </a></td>
-
              </tr>
              {% endfor %}
          </tbody>
 </table>
+</article>
 
 
-
-<table class="tabla">
-    <colgroup>
-             <col span="4">
-         <thead>
-             <tr>
-                 <td>Fecha</td>
-                 <td>Eje X</td>
-                 <td>Eje Y</td>
-                 <td>Eje Z</td>
-             </tr>
-         </thead>
-
-         <tbody>
-             {% for acc in medicionAcelerometro %}
-             <tr>
-                 <td>{{acc.fecha}}</td>
-                 <td>{{acc.eje_x}}</td>
-                 <td>{{acc.eje_y}}</td>
-                 <td>{{acc.eje_z}}</td>
-                 <td><a id="eliminar">
-                         <img src="https://static.vecteezy.com/system/resources/previews/000/442/652/non_2x/delete-vector-icon.jpg" width="38px">
-                 </a></td>
-                 <td><a id="editar">
-                         <img src="https://png.pngtree.com/png-clipart/20190630/original/pngtree-vector-pencil-icon-png-image_4152536.jpg" width="35px">
-                 </a></td>
-
-             </tr>
-             {% endfor %}
-         </tbody>
-</table>
+<article class="productos">
+    <table class="tabla2">
+        <colgroup>
+                 <col span="5">
+             <thead>
+                 <tr>
+                     <td>Fecha</td>
+                     <td>Eje X</td>
+                     <td>Eje Y</td>
+                     <td>Eje Z</td>
+                 </tr>
+             </thead>
+    
+             <tbody>
+                 {% for acc in medicionAcelerometro %}
+                 <tr>
+                     <td>{{acc.fecha}}</td>
+                     <td>{{acc.eje_x}}</td>
+                     <td>{{acc.eje_y}}</td>
+                     <td>{{acc.eje_z}}</td>
+                 </tr>
+                 {% endfor %}
+             </tbody>
+    </table>
+    </article>
+</section>
 </div>
 </div>
 {% endblock %}
