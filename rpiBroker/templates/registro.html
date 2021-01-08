@@ -7,6 +7,7 @@
   <div id="articulo-index">
       <h2 id="form-label">Registro de usuario</h2>
       <br>
+
       <form action="/registro" method="POST">
         <div class="form-group">
           <label id = "form-label">Username</label>
@@ -42,11 +43,12 @@
         {% if feedback %}
         <p class="text-danger float-right">{{ feedback }}</p>
         {% endif %}
-      </form>
+      
       <br>
       <form action="/" method="GET">
         <button type="submit" id="boton">Volver</button>
       </form>
+    </form>
     </div>
   </div>
 </div>
