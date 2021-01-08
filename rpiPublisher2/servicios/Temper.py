@@ -12,11 +12,11 @@ except:
     SIMULACION = True
 
 import json
-import smbus
 from servicios.dht_sensor import DHT
 import subprocess
 import os
 try:
+    import smbus
     import RPi.GPIO as GPIO
 except:
     excepciones.error_gpio_import_log()
@@ -27,7 +27,7 @@ GPIO_sensor = TEMP_PIN
 
 
 topic = "demotoy/temperatura"
-HOSTNAME = "test.mosquitto.org"
+HOSTNAME = "192.168.43.41"
 bus = smbus.SMBus(1)
 MMA7660FC_DEFAULT_ADDRESS           = 0x4C
 

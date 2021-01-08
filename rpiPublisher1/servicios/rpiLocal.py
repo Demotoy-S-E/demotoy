@@ -39,7 +39,7 @@ topic = "demotoy/acelerometro"
 # hostname = ""
 
 #Para la actividad 2: usad la IP del servidor gratutio de mosquitto
-HOSTNAME = "test.mosquitto.org"
+HOSTNAME = "192.168.43.41"
 
 # Seleccionar el bus I2C
 bus = smbus.SMBus(1)
