@@ -85,7 +85,7 @@ class Startup:
     def __add_controller_principal(self):
         self.__log_startup.info_log("Iniciando servicio rpi local y api...")
         self.__servicio_rpi_local = RpiLocal()
-        self.__api = Api()
+        self.__api = Api(servicio_db = self.__servicio_db)
 
         principal_controller_log = Applogging("Controlador Principal")
         self.__app.add_url_rule('/principal', endpoint = 'principal', view_func = Principalcontroller.as_view(
