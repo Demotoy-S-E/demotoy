@@ -87,7 +87,7 @@ skip-name-resolve
 bind-address=0.0.0.0
 ```
 ## Servicios
-![Alt text](docs/diseño-arquitectura.png?raw=true "diseño")
+![Alt text](docs/diseño-arquitectura.jpg?raw=true "diseño")
 ### Inyeccion de dependencias (startup.py)
 Es el punto de inicio de la aplicacion. Se definen los objetos que se van a instanciar, todos los servicios:
 
