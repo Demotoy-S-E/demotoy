@@ -68,11 +68,12 @@ class ClienteRPI2:
             temperatura = valor_temperatura)
 
     def __insert_medicion_temperatura(self, temperatura):
+        temperatura_ambiente = temperatura[0]
         self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
         fecha_actual = datetime.now()
         self.__cliente_log.info_log(fecha_actual)
         nueva_medicion = MTemperaturaExterna(
             fecha = fecha_actual,
-            temperatura_ambiente = temperatura)
+            temperatura_ambiente = temperatura_ambiente)
         self.__sesion.add(nueva_medicion)
         self.__sesion.commit()
