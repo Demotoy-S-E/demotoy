@@ -219,12 +219,12 @@ html,
     }
 
     footer a{
-		color: white;
+		color: rgb(100, 48, 136);
 		text-decoration: none;
 		}
 
 	footer a:hover {
-		color: rgb(100, 48, 136);
+		color:white;
 		}
 
         #nav {
