@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-{% block titulo %}Index{% endblock %} 
+{% block titulo %}Monitorizacion{% endblock %} 
 
 
 
 {% block contenido %}
 <div class="contenido-main" id="moni-image">
+    <div id="articulo-index">
+        <h2 id="form-label">Monitorizacion</h2>
+
 <table class="tabla">
     <colgroup>
              <col span="4">
@@ -20,10 +23,10 @@
              <tr>
                  <td>{{temp.fecha}}</td>
                  <td>{{temp.temperatura_ambiente}}</td>
-                 <td><a id="eliminar" href = "http://127.0.0.1:8000/miApp/clienteeliminar/{{cli.id}}">
+                 <td><a id="eliminar">
                          <img src="https://static.vecteezy.com/system/resources/previews/000/442/652/non_2x/delete-vector-icon.jpg" width="38px">
                  </a></td>
-                 <td><a id="editar" href = "http://127.0.0.1:8000/miApp/clienteeditar/{{cli.id}}">
+                 <td><a id="editar"></a>
                          <img src="https://png.pngtree.com/png-clipart/20190630/original/pngtree-vector-pencil-icon-png-image_4152536.jpg" width="35px">
                  </a></td>
 
@@ -53,10 +56,10 @@
                  <td>{{acc.eje_x}}</td>
                  <td>{{acc.eje_y}}</td>
                  <td>{{acc.eje_z}}</td>
-                 <td><a id="eliminar" href = "http://127.0.0.1:8000/miApp/clienteeliminar/{{cli.id}}">
+                 <td><a id="eliminar">
                          <img src="https://static.vecteezy.com/system/resources/previews/000/442/652/non_2x/delete-vector-icon.jpg" width="38px">
                  </a></td>
-                 <td><a id="editar" href = "http://127.0.0.1:8000/miApp/clienteeditar/{{cli.id}}">
+                 <td><a id="editar">
                          <img src="https://png.pngtree.com/png-clipart/20190630/original/pngtree-vector-pencil-icon-png-image_4152536.jpg" width="35px">
                  </a></td>
 
@@ -64,5 +67,6 @@
              {% endfor %}
          </tbody>
 </table>
+</div>
 </div>
 {% endblock %}
