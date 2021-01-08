@@ -11,14 +11,20 @@
 {% block contenido %}
 
 <div class="contenido-main" id="prin-image">
-  <h2 id="form-label" text-align="right">Pagina principal</h2>
-  <p id="form-label" text-align="right">Temperatura CPU: {{ cpu }}</p>
+  <h2 color="white">Pagina principal</h2>
   <br>
+  <br>
+  <p color="white">Temperatura CPU: {{ cpu }}</p>
+  <br>
+<div id = "LogOut" >
+  <form action="/" method="GET">
+    <button type="submit" id="boton">Log out</button>
+  </form>
+</div>
+
+
   <div id="articulo-index">
     <div id="form-index">
-      <form action="/" method="GET">
-        <button type="submit" id="boton">Log out</button>
-      </form>
       <br>
       <form action="/principal" method="POST">
         <div class="form-group">
