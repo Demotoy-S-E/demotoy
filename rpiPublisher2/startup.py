@@ -8,4 +8,3 @@ class Startup:
         self.__app = app
         self.__log_startup = Applogging("Startup")
         self.__temperatura = RpiLocal()
-

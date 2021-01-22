@@ -1,5 +1,10 @@
 import time
-import RPi.GPIO as GPIO
+import comun.excepciones as excepciones
+
+try:
+    import RPi.GPIO as GPIO
+except:
+    excepciones.error_gpio_import_log()
 
 class DHT():
 
