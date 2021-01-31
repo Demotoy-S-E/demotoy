@@ -27,7 +27,7 @@ class MysqlDB(metaclass=Singleton):
         self.__mysql_log = Applogging("MysqlDB")
         self.engine = None
         self.sesion = None
-        self.__iniciar_configuracion_inicial(_app_ctx_stack)
+        self.__iniciar_instancias_conexiones(_app_ctx_stack)
 
     def crear_nueva_conexion_si_ha_caducado(self):
         try:
@@ -35,27 +35,28 @@ class MysqlDB(metaclass=Singleton):
             id = self.engine.execute("SELECT id FROM domotoyawsdatabase.usuario").first()
             return self.sesion
         except:
-            self.__server_ssh = self.__tunel_ssh()
+            self.__server_ssh = self.__crear_tunel_ssh()
             self.__server_ssh.start()
             self.__mysql_log.warning_log("La sesion ha caducado o ha habido un problema inesperado")
             self.__crear_conexion()
             self.__mysql_log.info_log("Se ha establecido una nueva conexion")
             return self.sesion
         
-    def __iniciar_configuracion_inicial(self, _app_ctx_stack):
+    def __iniciar_instancias_conexiones(self, _app_ctx_stack):
         try:
-            self.__obtener_direccion_remota_ssh()
-            self.__server_ssh = self.__tunel_ssh()
-            self.__server_ssh.start()
-            puerto_socket_ssh = str(self.__server_ssh.local_bind_port)
-            self.__cadena_conexion = self.__obtener_direcion_remota_mysql(puerto_socket_ssh)
-            self.__mysql_log.info_log(f"Utilizando direccion mysql mediante ssh: {self.__cadena_conexion}")
-            self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
-            self.__crear_conexion()
+            puerto_socket_ssh = self.__iniciar_ssh()
+            self.__iniciar_mysql(puerto_socket_ssh)
         except:
             self.__mysql_log.error_log("No se han podido iniciar las instancias de la conexion")
 
-    def __obtener_direccion_remota_ssh(self):
+    def __iniciar_ssh(self) -> str:
+        self.__obtener_direccion_remota_ssh()
+        self.__server_ssh = self.__crear_tunel_ssh()
+        self.__server_ssh.start()
+        puerto_socket_ssh = str(self.__server_ssh.local_bind_port)
+        return puerto_socket_ssh
+
+    def __obtener_direccion_remota_ssh(self) -> str:
         global SSH_IP_REMOTA, SSH_PUERTO, SSH_NOMBRE_USUARIO, SSH_PRIVATE_KEY_PATH
         try:
             with open("awsserversettings.json") as server_settings_json:
@@ -68,7 +69,7 @@ class MysqlDB(metaclass=Singleton):
         except:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
-    def __tunel_ssh(self):
+    def __crear_tunel_ssh(self) -> SSHTunnelForwarder:
         try:
             server = SSHTunnelForwarder(
             (SSH_IP_REMOTA , SSH_PUERTO),
@@ -81,7 +82,13 @@ class MysqlDB(metaclass=Singleton):
         except:
             self.__mysql_log.error_log("No se han podido establecer la conexion ssh")
 
-    def __obtener_direcion_remota_mysql(self, puerto_socket_ssh):
+    def __iniciar_mysql(self, puerto_socket_ssh):
+            self.__cadena_conexion = self.__obtener_direcion_remota_mysql(puerto_socket_ssh)
+            self.__mysql_log.info_log(f"Utilizando direccion mysql mediante ssh: {self.__cadena_conexion}")
+            self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
+            self.__crear_conexion()
+
+    def __obtener_direcion_remota_mysql(self, puerto_socket_ssh) -> str:
         global MYSQL_IP_LOCAL, MYSQL_USER, MYSQL_CONTRASENIA, MYSQl_PUERTO, MYSQL_NOMBRE_DB, PUERTO_SOCKET_LOCAL
         try:
             PUERTO_SOCKET_LOCAL = puerto_socket_ssh

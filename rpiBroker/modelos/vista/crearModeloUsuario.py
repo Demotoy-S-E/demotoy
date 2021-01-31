@@ -1,4 +1,4 @@
-class CrearUsuario:
+class CrearModeloUsuario:
     
     def __init__(self, nombre, email, contrasenia, nombre_completo, numero_telefono, direccion):
         self.nombre = nombre

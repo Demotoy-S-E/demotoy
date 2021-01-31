@@ -1,5 +1,4 @@
-from flask import render_template, request
-from flask import request, redirect
+from flask import render_template, request, redirect
 from flask.views import MethodView   
 from modelos.usuario import Usuario
 from static.constantes import (
@@ -43,7 +42,7 @@ class Principalcontroller(MethodView):
             return render_template(TEMPLATE_PRINCIPAL_CONSTANTE, feedback=feedback)
         else:
             self.__api.modificar_usuario(
-                id = self.__servicio_autenticacion.usuario.id,
+                id = self.__servicio_autenticacion.usuario.id, # esto no debe hacerlo
                 nombre = nombre_form,
                 email = email_form,
                 nombre_completo = nombre_completo_form,

@@ -11,14 +11,19 @@ class Usuario(Base):
         self.nombre_completo = nombre_completo
         self.numero_telefono = numero_telefono
         self.direccion = direccion
-        self.__clave = Fernet.generate_key()
-        self.__clave.decode()
-        self.__token = self.__encrypt(contrasenia.encode(), self.__clave)
+        self.__clave = None
+        self.__token = None
+        self.__generar_clave_token(contrasenia)
 
     def get_contrasenia(self):
         contrasenia_desencriptada = self.__decrypt(self.__token, self.__clave)
         contrasenia_desencriptada = contrasenia_desencriptada.decode("utf-8")
         return contrasenia_desencriptada
+
+    def __generar_clave_token(self, contrasenia):
+        self.__clave = Fernet.generate_key()
+        self.__clave.decode()
+        self.__token = self.__encrypt(contrasenia.encode(), self.__clave)
 
     def __encrypt(self, message: bytes, key: bytes) -> bytes:
         return Fernet(key).encrypt(message)
