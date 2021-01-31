@@ -4,53 +4,48 @@
 <div class="contenido-main" id="moni-image">
     <div id="articulo-index">
         <h2 id="form-label">Monitorizacion</h2>
-    <section id="productos" class="clear">    
-        <article class="productos">       
-            <table class="tabla1">
-                <colgroup>
-                        <col span="5">
+        <section id="productos" class="clear">    
+            <article class="productos">       
+                <table class="tabla1">
+                        <thead>
+                            <tr>
+                                <td>Fecha</td>
+                                <td>Temperatura</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for temp in mediciones_temperatura %}
+                            <tr>
+                                <td>{{temp.fecha}}</td>
+                                <td>{{temp.temperatura_ambiente}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+            </article>
+            <article class="productos">
+                <table class="tabla2">
                     <thead>
-                        <tr>
-                            <td>Fecha</td>
-                            <td>Temperatura</td>
-                        </tr>
+                            <tr>
+                                <td>Fecha</td>
+                                <td>Eje X</td>
+                                <td>Eje Y</td>
+                                <td>Eje Z</td>
+                            </tr>
                     </thead>
                     <tbody>
-                        {% for temp in mediciones_temperatura %}
-                        <tr>
-                            <td>{{temp.fecha}}</td>
-                            <td>{{temp.temperatura_ambiente}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </colgroup>
-            </table>
-        </article>
-         <article class="productos">
-            <table class="tabla2">
-                 <colgroup>
-                         <col span="5">
-                    <thead>
-                        <tr>
-                            <td>Fecha</td>
-                            <td>Eje X</td>
-                            <td>Eje Y</td>
-                            <td>Eje Z</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for acc in medicionAcelerometro %}
-                        <tr>
-                            <td>{{acc.fecha}}</td>
-                            <td>{{acc.eje_x}}</td>
-                            <td>{{acc.eje_y}}</td>
-                            <td>{{acc.eje_z}}</td>
-                        </tr>
-                        {% endfor %}
+                            {% for acc in medicionAcelerometro %}
+                            <tr>
+                                <td>{{acc.fecha}}</td>
+                                <td>{{acc.eje_x}}</td>
+                                <td>{{acc.eje_y}}</td>
+                                <td>{{acc.eje_z}}</td>
+                            </tr>
+                            {% endfor %}
                     </tbody>
                 </table>
             </article>
-    </section>
-</div>
+        </section>
+    </div>
 </div>
 {% endblock %}

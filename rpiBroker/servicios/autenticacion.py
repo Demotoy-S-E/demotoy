@@ -17,8 +17,7 @@ class Autenticacion(metaclass=Singleton):
     def crear_usuario(self, nombre_form, email_form, contrasenia_form, nombre_completo_form, numero_form, direccion_form) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
-            if (self.__sesion.query(exists().where(Usuario.nombre == nombre_form)).scalar()):
-                self.__autenticacion_log.warning_log(f"El usuario con nombre {nombre_form} ya existe")
+            if (self.__usuario_existe(nombre_form)):
                 return False
             else:
                 nuevo_usuario = Usuario(
@@ -38,21 +37,37 @@ class Autenticacion(metaclass=Singleton):
     def comprobar_autenticacion(self, nombre_form, contrasenia_form) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
-            if (self.__sesion.query(exists().where(Usuario.nombre == nombre_form)).scalar()):
-                usuario = self.__sesion.query(Usuario).filter_by(nombre = nombre_form).first()
+            if (self.__usuario_existe(nombre_form)):
+                usuario_existente = self.__obtener_usuario(nombre_form)
                 self.__sesion.commit()
-                if (usuario.get_contrasenia() != contrasenia_form):
-                    self.__autenticacion_log.warning_log(
-                        f"El usuario con nombre {nombre_form} existe pero las credenciales no son correctas")
-                    return self.usuario_autenticado
-                elif (usuario.get_contrasenia() == contrasenia_form):
-                    self.usuario_autenticado = True
-                    self.usuario = usuario
-                    self.__autenticacion_log.info_log("Usuario autenticado")
-                    self.ultima_autenticacion = time.time()
-                    return self.usuario_autenticado
+                self.__comprobar_credenciales(usuario_existente, nombre_form, contrasenia_form)
+                return self.usuario_autenticado
             else:
                 self.__autenticacion_log.warning_log(f"El usuario con nombre {nombre_form} no existe")
                 return self.usuario_autenticado
         except:
             self.__autenticacion_log.error_log("Ha habido un problema con la autenticacion")
+
+    def __usuario_existe(self, nombre_form) -> bool:
+        if (self.__sesion.query(exists().where(Usuario.nombre == nombre_form)).scalar()):
+                self.__autenticacion_log.info_log(f"El usuario con nombre {nombre_form} existe")
+                return True
+        else:
+            return False
+
+    def __obtener_usuario(self, nombre_form):
+        usuario = self.__sesion.query(Usuario).filter_by(nombre = nombre_form).first()
+        return usuario
+
+    def __comprobar_credenciales(self, usuario_existente, nombre_form, contrasenia_form):
+        if (usuario_existente.get_contrasenia() != contrasenia_form):
+                self.__autenticacion_log.warning_log(
+                    f"El usuario con nombre {nombre_form} existe pero las credenciales no son correctas")
+        elif (usuario_existente.get_contrasenia() == contrasenia_form):
+            self.__estado_autenticado_true(usuario_existente)
+
+    def __estado_autenticado_true(self, usuario_existente):
+        self.usuario_autenticado = True
+        self.usuario = usuario_existente
+        self.__autenticacion_log.info_log("Usuario autenticado")
+        self.ultima_autenticacion = time.time()
