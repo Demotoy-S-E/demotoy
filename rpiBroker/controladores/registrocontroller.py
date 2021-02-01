@@ -22,26 +22,27 @@ class Registrocontroller(MethodView):
             feedback = f"Campos vacios en {', '.join(campos_vacios)}"
             return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)
         else:
-            self.__crear_nuevo_usuario_si_no_existe(nuevo_usuario)
+            self.__devolver_index_si_crea_usuario(nuevo_usuario)
     
-    def __obtener_parametros_request(self, informacion_request):
-        nuevo_usuario = CrearModeloUsuario()
-        nuevo_usuario.nombre = informacion_request.get("nombre")
-        nuevo_usuario.email = informacion_request.get("email")
-        nuevo_usuario.contrasenia = informacion_request.get("contrasenia")
-        nuevo_usuario.nombre_completo = informacion_request.get("nombre_completo")
-        nuevo_usuario.numero_telefono = informacion_request.get("numero_telefono")
-        nuevo_usuario.direccion = informacion_request.get("direccion")
+    def __obtener_parametros_request(self, informacion_request) -> CrearModeloUsuario:
+        nuevo_usuario = CrearModeloUsuario(
+            nombre = informacion_request.get("nombre"),
+            email = informacion_request.get("email"),
+            contrasenia = informacion_request.get("contrasenia"),
+            nombre_completo = informacion_request.get("nombre_completo"),
+            numero_telefono = informacion_request.get("numero_telefono"),
+            direccion = informacion_request.get("direccion")
+        )
         return nuevo_usuario
 
-    def __revisar_campos_vacios(self, informacion_request):
+    def __revisar_campos_vacios(self, informacion_request) -> list:
         campos_requeridos = []
         for k, v in informacion_request.items():
             if v == "":
                 campos_requeridos.append(k)
         return campos_requeridos
 
-    def __crear_nuevo_usuario_si_no_existe(self, nuevo_usuario):
+    def __devolver_index_si_crea_usuario(self, nuevo_usuario):
         usuario_creado = self.__autenticacion.crear_usuario(nuevo_usuario)
         if (usuario_creado):
             return render_template(TEMPLATE_INDEX_CONSTANTE)

@@ -14,36 +14,36 @@ class Autenticacion(metaclass=Singleton):
         self.ultima_autenticacion = None
         self.usuario = None
 
-    def crear_usuario(self, nuevo_usuario) -> bool:
+    def crear_usuario(self, modelo_nuevo_usuario) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
-            if (self.__usuario_existe(nuevo_usuario.nombre)):
+            if (self.__usuario_existe(modelo_nuevo_usuario.nombre)):
                 return False
             else:
-                nuevo_usuario = Usuario(
-                    nombre = nuevo_usuario.nombre, 
-                    email = nuevo_usuario.email, 
-                    contrasenia = nuevo_usuario.contrasenia,
-                    nombre_completo = nuevo_usuario.nombre_completo,
-                    numero_telefono = nuevo_usuario.numero_telefono,
-                    direccion = nuevo_usuario.direccion)
-                self.__sesion.add(nuevo_usuario)
+                modelo_nuevo_usuario = Usuario(
+                    nombre = modelo_nuevo_usuario.nombre, 
+                    email = modelo_nuevo_usuario.email, 
+                    contrasenia = modelo_nuevo_usuario.contrasenia,
+                    nombre_completo = modelo_nuevo_usuario.nombre_completo,
+                    numero_telefono = modelo_nuevo_usuario.numero_telefono,
+                    direccion = modelo_nuevo_usuario.direccion)
+                self.__sesion.add(modelo_nuevo_usuario)
                 self.__sesion.commit()
                 return True
         except:
             self.__autenticacion_log.error_log("Ha habido un problema para crear usuario")
             return False
 
-    def comprobar_autenticacion(self, nombre_form, contrasenia_form) -> bool:
+    def comprobar_autenticacion(self, modelo_auth) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
-            if (self.__usuario_existe(nombre_form)):
-                usuario_existente = self.__obtener_usuario(nombre_form)
+            if (self.__usuario_existe(modelo_auth.nombre)):
+                usuario_existente = self.__obtener_usuario(modelo_auth.nombre)
                 self.__sesion.commit()
-                self.__comprobar_credenciales(usuario_existente, nombre_form, contrasenia_form)
+                self.__comprobar_credenciales(usuario_existente, modelo_auth.nombre, modelo_auth.contrasenia)
                 return self.usuario_autenticado
             else:
-                self.__autenticacion_log.warning_log(f"El usuario con nombre {nombre_form} no existe")
+                self.__autenticacion_log.warning_log(f"El usuario con nombre {modelo_auth.nombre} no existe")
                 return self.usuario_autenticado
         except:
             self.__autenticacion_log.error_log("Ha habido un problema con la autenticacion")

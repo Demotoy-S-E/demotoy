@@ -10,14 +10,14 @@ class Api:
         self.__servicio_db = servicio_db
         self.__sesion = servicio_db.sesion
 
-    def modificar_usuario(self, id, nombre, email, nombre_completo, numero_telefono, direccion):
+    def modificar_usuario(self, id, modelo_actualizar_usuario):
         self.__sesion = self.__servicio_db.crear_nueva_conexion_si_ha_caducado()
         self.__sesion.query(Usuario).filter_by(id = id).update({
-            "nombre" : nombre,
-            "email" : email,
-            "nombre_completo" : nombre_completo,
-            "numero_telefono" : numero_telefono,
-            "direccion" : direccion
+            "nombre" : modelo_actualizar_usuario.nombre,
+            "email" : modelo_actualizar_usuario.email,
+            "nombre_completo" : modelo_actualizar_usuario.nombre_completo,
+            "numero_telefono" : modelo_actualizar_usuario.numero_telefono,
+            "direccion" : modelo_actualizar_usuario.direccion
         })
         self.__sesion.commit()
 

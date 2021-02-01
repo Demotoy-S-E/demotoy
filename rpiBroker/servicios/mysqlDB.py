@@ -25,6 +25,7 @@ class MysqlDB(metaclass=Singleton):
     def __init__(self, app, _app_ctx_stack):
         self.__app = app
         self.__mysql_log = Applogging("MysqlDB")
+        self.__server_ssh = None
         self.engine = None
         self.sesion = None
         self.__iniciar_instancias_conexiones(_app_ctx_stack)
@@ -35,14 +36,14 @@ class MysqlDB(metaclass=Singleton):
             id = self.engine.execute("SELECT id FROM domotoyawsdatabase.usuario").first()
             return self.sesion
         except:
-            self.__server_ssh = self.__crear_tunel_ssh()
-            self.__server_ssh.start()
             self.__mysql_log.warning_log("La sesion ha caducado o ha habido un problema inesperado")
-            self.__crear_conexion()
+            self.__server_ssh = self.__crear_tunel_ssh()
+            self.__crear_conexion_demotoy_database()
             self.__mysql_log.info_log("Se ha establecido una nueva conexion")
             return self.sesion
         
     def __iniciar_instancias_conexiones(self, _app_ctx_stack):
+        puerto_socket_ssh = self.__iniciar_ssh()
         try:
             puerto_socket_ssh = self.__iniciar_ssh()
             self.__iniciar_mysql(puerto_socket_ssh)
@@ -52,7 +53,6 @@ class MysqlDB(metaclass=Singleton):
     def __iniciar_ssh(self) -> str:
         self.__obtener_direccion_remota_ssh()
         self.__server_ssh = self.__crear_tunel_ssh()
-        self.__server_ssh.start()
         puerto_socket_ssh = str(self.__server_ssh.local_bind_port)
         return puerto_socket_ssh
 
@@ -77,7 +77,10 @@ class MysqlDB(metaclass=Singleton):
             ssh_pkey = SSH_PRIVATE_KEY_PATH,
             remote_bind_address=(MYSQL_IP_LOCAL, MYSQl_PUERTO),
             )  
-            self.__mysql_log.info_log(f"Utilizando la direccion remota {SSH_IP_REMOTA}:{SSH_PUERTO} con IP host servidor {MYSQL_IP_LOCAL}:{MYSQl_PUERTO}")
+            self.__mysql_log.info_log(
+                f"Utilizando la direccion remota {SSH_IP_REMOTA}:{SSH_PUERTO} con IP host servidor {MYSQL_IP_LOCAL}:{MYSQl_PUERTO}")
+
+            server.start()
             return server 
         except:
             self.__mysql_log.error_log("No se han podido establecer la conexion ssh")
@@ -86,7 +89,7 @@ class MysqlDB(metaclass=Singleton):
             self.__cadena_conexion = self.__obtener_direcion_remota_mysql(puerto_socket_ssh)
             self.__mysql_log.info_log(f"Utilizando direccion mysql mediante ssh: {self.__cadena_conexion}")
             self.engine = create_engine(self.__cadena_conexion, pool_pre_ping = True)
-            self.__crear_conexion()
+            self.__crear_conexion_demotoy_database()
 
     def __obtener_direcion_remota_mysql(self, puerto_socket_ssh) -> str:
         global MYSQL_IP_LOCAL, MYSQL_USER, MYSQL_CONTRASENIA, MYSQl_PUERTO, MYSQL_NOMBRE_DB, PUERTO_SOCKET_LOCAL
@@ -110,7 +113,7 @@ class MysqlDB(metaclass=Singleton):
     def __crear_cadena_conexion(self, usuario, contrasenia, ip_local, puerto_socket, base_de_datos):
         return f"mysql+mysqldb://{usuario}:{contrasenia}@{ip_local}:{puerto_socket}/{base_de_datos}"
 
-    def __crear_conexion(self):
+    def __crear_conexion_demotoy_database(self):
         self.engine.connect()
         Session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         self.sesion = Session()

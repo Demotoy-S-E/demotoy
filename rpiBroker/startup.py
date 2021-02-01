@@ -29,9 +29,9 @@ class Startup:
         self.__servicioRPi2 = None
         self.__servicio_rpi_local = None
         self.__api = None
-        self.__inyeccion_dependencias()
+        self.__inyeccion_servicios()
 
-    def __inyeccion_dependencias(self):
+    def __inyeccion_servicios(self):
         self.__log_startup.info_log("Iniciando instacias de la aplicacion")
         self.__add_servicio_db()
         self.__add_servicio_autenticacion()
