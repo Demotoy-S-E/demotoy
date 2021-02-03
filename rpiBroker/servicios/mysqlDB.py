@@ -43,7 +43,6 @@ class MysqlDB(metaclass=Singleton):
             return self.sesion
         
     def __iniciar_instancias_conexiones(self, _app_ctx_stack):
-        puerto_socket_ssh = self.__iniciar_ssh()
         try:
             puerto_socket_ssh = self.__iniciar_ssh()
             self.__iniciar_mysql(puerto_socket_ssh)

@@ -1,5 +1,4 @@
-from flask import render_template, request
-from flask import request, redirect
+from flask import render_template, request, redirect
 from flask.views import MethodView   
 from modelos.usuario import Usuario
 from modelos.vista.comprobarModeloUsuario import ComprobarModeloUsuario
@@ -15,16 +14,18 @@ class Indexcontroller(MethodView):
         self.__autenticacion.usuario_autenticado = False
         return render_template(TEMPLATE_INDEX_CONSTANTE)
 
+    # REST siempre tiene que DEVOLVER un objeto
     def post(self):
         informacion_request = request.form
-        modelo_auth = self.__obtener_parametros_request(informacion_request)
         campos_vacios = self.__revisar_campos_vacios(informacion_request)
         if (campos_vacios):
             self.__controlador_log.warning_log("Se han encontrado campos vacios")
             feedback = f"Campos vacios en {', '.join(campos_vacios)}"
             return render_template(TEMPLATE_INDEX_CONSTANTE, feedback=feedback)
         else:
-            self.__autenticar(modelo_auth)
+            modelo_auth = self.__obtener_parametros_request(informacion_request)
+            return self.__autenticar(modelo_auth)
+
 
     def __obtener_parametros_request(self, informacion_request) -> ComprobarModeloUsuario:
         auth_usuario = ComprobarModeloUsuario(

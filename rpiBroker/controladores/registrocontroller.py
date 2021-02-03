@@ -1,7 +1,9 @@
-from flask import render_template, request
-from flask import request, redirect
+from flask import render_template, request, redirect
 from flask.views import MethodView   
-from static.constantes import TEMPLATE_INDEX_CONSTANTE, TEMPLATE_REGISTRO_CONSTANTE
+from static.constantes import (
+    TEMPLATE_INDEX_CONSTANTE, 
+    TEMPLATE_REGISTRO_CONSTANTE,
+    DIRECCION_INDEX_CONSTANTE)
 from modelos.vista.crearModeloUsuario import CrearModeloUsuario
 
 class Registrocontroller(MethodView):
@@ -22,7 +24,7 @@ class Registrocontroller(MethodView):
             feedback = f"Campos vacios en {', '.join(campos_vacios)}"
             return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)
         else:
-            self.__devolver_index_si_crea_usuario(nuevo_usuario)
+            return self.__devolver_index_si_crea_usuario(nuevo_usuario)
     
     def __obtener_parametros_request(self, informacion_request) -> CrearModeloUsuario:
         nuevo_usuario = CrearModeloUsuario(
@@ -45,7 +47,7 @@ class Registrocontroller(MethodView):
     def __devolver_index_si_crea_usuario(self, nuevo_usuario):
         usuario_creado = self.__autenticacion.crear_usuario(nuevo_usuario)
         if (usuario_creado):
-            return render_template(TEMPLATE_INDEX_CONSTANTE)
+            return redirect(DIRECCION_INDEX_CONSTANTE)
         else:
             feedback = f"El usuario {nuevo_usuario.nombre} no es correcto o ya existe"
             return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)

@@ -79,13 +79,11 @@ class Startup:
             registro_controller_log = registro_controller_log), 
             methods = ["GET", "POST"])
 
-    """ Aqui se aniade el metodo para cliente RPI1 """
     def __add_servicio_cliente_rpi1(self):
         self.__log_startup.info_log("Iniciando servicio cliente RPi1..")
         nombre_log = "RPI1"
         self.__servicioRPi1 = ClienteRPI1(nombre_log = nombre_log, servicio_db = self.__servicio_db)
 
-    """ Aqui se aniade el metodo para cliente RPI2 """
     def __add_servicio_cliente_rpi2(self):
         self.__log_startup.info_log("Iniciando servicio cliente RPi2..")
         nombre_log = "RPI2"
@@ -109,9 +107,9 @@ class Startup:
 
     def __add_servicio_monitorizacion(self):
         self.__log_startup.info_log("Iniciando servicio monitorizacion..")
-        self.__add_monitorización_controller()
+        self.__add_monitorizacion_controller()
 
-    def __add_monitorización_controller(self):
+    def __add_monitorizacion_controller(self):
         monitorizacion_controller_log = Applogging("Controlador Principal")
         self.__app.add_url_rule('/monitorizacion', endpoint = 'monitorizacion', view_func = Monitorizacioncontroller.as_view(
             'monitorizacion', 
