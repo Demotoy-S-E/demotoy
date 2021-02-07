@@ -6,6 +6,8 @@ from comun.singleton import Singleton
 from servicios.weblogging import Applogging
 import json
 from time import sleep
+import traceback
+import sys
 from static.constantes import (
     MYSQL_IP_LOCAL, 
     MYSQL_USER, 
@@ -35,7 +37,7 @@ class MysqlDB(metaclass=Singleton):
             self.sesion.rollback()
             id = self.engine.execute("SELECT id FROM domotoyawsdatabase.usuario").first()
             return self.sesion
-        except:
+        except Exception:
             self.__mysql_log.warning_log("La sesion ha caducado o ha habido un problema inesperado")
             self.__server_ssh = self.__crear_tunel_ssh()
             self.__crear_conexion_demotoy_database()
@@ -46,7 +48,7 @@ class MysqlDB(metaclass=Singleton):
         try:
             puerto_socket_ssh = self.__iniciar_ssh()
             self.__iniciar_mysql(puerto_socket_ssh)
-        except:
+        except Exception:
             self.__mysql_log.error_log("No se han podido iniciar las instancias de la conexion")
 
     def __iniciar_ssh(self) -> str:
@@ -65,7 +67,7 @@ class MysqlDB(metaclass=Singleton):
                     SSH_PUERTO = configuracion['port']
                     SSH_NOMBRE_USUARIO = configuracion['server-user']
                     SSH_PRIVATE_KEY_PATH = configuracion['private-key']
-        except:
+        except Exception:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
     def __crear_tunel_ssh(self) -> SSHTunnelForwarder:
@@ -81,7 +83,7 @@ class MysqlDB(metaclass=Singleton):
 
             server.start()
             return server 
-        except:
+        except Exception:
             self.__mysql_log.error_log("No se han podido establecer la conexion ssh")
 
     def __iniciar_mysql(self, puerto_socket_ssh):
@@ -106,13 +108,20 @@ class MysqlDB(metaclass=Singleton):
                     MYSQL_NOMBRE_DB = configuracion['db']
                     cadena_conexion = self.__crear_cadena_conexion(MYSQL_USER, MYSQL_CONTRASENIA, MYSQL_IP_LOCAL, PUERTO_SOCKET_LOCAL, MYSQL_NOMBRE_DB)
             return cadena_conexion
-        except:
+        except Exception:
             self.__mysql_log.error_log("No se ha podido obtener las credenciales de servidor remoto")
 
     def __crear_cadena_conexion(self, usuario, contrasenia, ip_local, puerto_socket, base_de_datos):
         return f"mysql+mysqldb://{usuario}:{contrasenia}@{ip_local}:{puerto_socket}/{base_de_datos}"
 
     def __crear_conexion_demotoy_database(self):
-        self.engine.connect()
-        Session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
-        self.sesion = Session()
+        global MYSQL_NOMBRE_DB
+        try:
+            self.engine.connect()
+            Session = sessionmaker(
+                autocommit = False, 
+                autoflush = False, 
+                bind=self.engine)
+            self.sesion = Session()
+        except Exception:
+            self.__mysql_log.error_log("Error al intentar crear la conexión con la base de datos: {MYSQL_NOMBRE_DB}")
