@@ -26,19 +26,18 @@ class Indexcontroller(MethodView):
             modelo_auth = self.__obtener_parametros_request(informacion_request)
             return self.__autenticar(modelo_auth)
 
-
-    def __obtener_parametros_request(self, informacion_request) -> ComprobarModeloUsuario:
-        auth_usuario = ComprobarModeloUsuario(
-            nombre = informacion_request.get("nombre"),
-            contrasenia = informacion_request.get("contrasenia"))
-        return auth_usuario
-
     def __revisar_campos_vacios(self, informacion_request):
         campos_requeridos = []
         for k, v in informacion_request.items():
             if v == "":
                 campos_requeridos.append(k)
         return campos_requeridos
+
+    def __obtener_parametros_request(self, informacion_request) -> ComprobarModeloUsuario:
+        auth_usuario = ComprobarModeloUsuario(
+            nombre = informacion_request.get("nombre"),
+            contrasenia = informacion_request.get("contrasenia"))
+        return auth_usuario
 
     def __autenticar(self, modelo_auth):
         autenticacion_aceptada = self.__autenticacion.comprobar_autenticacion(modelo_auth)

@@ -4,6 +4,7 @@ from controladores.indexcontroller import Indexcontroller
 from controladores.registrocontroller import Registrocontroller
 from controladores.principalcontroller import Principalcontroller
 from controladores.monitorizacioncontroller import Monitorizacioncontroller
+from repositorios.repositorioUsuario import RepositorioUsuario
 from servicios.weblogging import Applogging
 from servicios.mysqlDB import MysqlDB
 from servicios.autenticacion import Autenticacion
@@ -25,6 +26,7 @@ class Startup:
         self.__log_startup = Applogging("Startup")
         self.__servicio_db = None
         self.__servicio_autenticacion = None
+        self.__repositorio_usuario = None
         self.__servicioRPi1 = None
         self.__servicioRPi2 = None
         self.__servicio_rpi_local = None
@@ -34,6 +36,7 @@ class Startup:
     def __inyeccion_servicios(self):
         self.__log_startup.info_log("Iniciando instacias de la aplicacion")
         self.__add_servicio_db()
+        self.__add_repositorios()
         self.__add_servicio_autenticacion()
         self.__add_servicio_cliente_rpi1()
         self.__add_servicio_cliente_rpi2()
@@ -57,6 +60,9 @@ class Startup:
         except:
             self.__log_startup.error_log("Error a la hora de crear tablas")
 
+    def __add_repositorios(self):
+        self.__repositorio_usuario = RepositorioUsuario(self.__servicio_db, self.sesion)
+
     def __add_servicio_autenticacion(self):
         self.__log_startup.info_log("Iniciando servicio autenticacion...")
         self.__servicio_autenticacion = Autenticacion(self.__servicio_db)
@@ -75,7 +81,7 @@ class Startup:
         registro_controller_log = Applogging("Controlador Registro")
         self.__app.add_url_rule('/registro', endpoint = 'registro', view_func = Registrocontroller.as_view(
             'registro', 
-            autenticacion = self.__servicio_autenticacion, 
+            repositorio_usuario = self.__repositorio_usuario, 
             registro_controller_log = registro_controller_log), 
             methods = ["GET", "POST"])
 

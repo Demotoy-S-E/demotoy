@@ -2,6 +2,8 @@ from comun.singleton import Singleton
 from sqlalchemy import exists
 from servicios.weblogging import Applogging
 from modelos.usuario import Usuario
+from modelos.vista.crearModeloUsuario import CrearModeloUsuario
+from modelos.vista.comprobarModeloUsuario import ComprobarModeloUsuario
 import time 
 
 class Autenticacion(metaclass=Singleton):
@@ -14,7 +16,7 @@ class Autenticacion(metaclass=Singleton):
         self.ultima_autenticacion = None
         self.usuario = None
 
-    def crear_usuario(self, modelo_nuevo_usuario) -> bool:
+    def crear_usuario(self, modelo_nuevo_usuario: CrearModeloUsuario) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
             if (self.__usuario_existe(modelo_nuevo_usuario.nombre)):
@@ -34,7 +36,7 @@ class Autenticacion(metaclass=Singleton):
             self.__autenticacion_log.error_log("Ha habido un problema para crear usuario")
             return False
 
-    def comprobar_autenticacion(self, modelo_auth) -> bool:
+    def comprobar_autenticacion(self, modelo_auth: ComprobarModeloUsuario) -> bool:
         try:
             self.__sesion = self.servicio_db.crear_nueva_conexion_si_ha_caducado()
             if (self.__usuario_existe(modelo_auth.nombre)):
@@ -55,18 +57,18 @@ class Autenticacion(metaclass=Singleton):
         else:
             return False
 
-    def __obtener_usuario(self, nombre_form):
+    def __obtener_usuario(self, nombre_form: str):
         usuario = self.__sesion.query(Usuario).filter_by(nombre = nombre_form).first()
         return usuario
 
-    def __comprobar_credenciales(self, usuario_existente, nombre_form, contrasenia_form):
+    def __comprobar_credenciales(self, usuario_existente: Usuario, nombre_form: str, contrasenia_form: str):
         if (usuario_existente.get_contrasenia() != contrasenia_form):
                 self.__autenticacion_log.warning_log(
                     f"El usuario con nombre {nombre_form} existe pero las credenciales no son correctas")
         elif (usuario_existente.get_contrasenia() == contrasenia_form):
             self.__estado_autenticado_true(usuario_existente)
 
-    def __estado_autenticado_true(self, usuario_existente):
+    def __estado_autenticado_true(self, usuario_existente: Usuario):
         self.usuario_autenticado = True
         self.usuario = usuario_existente
         self.__autenticacion_log.info_log("Usuario autenticado")

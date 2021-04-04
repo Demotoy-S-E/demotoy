@@ -50,6 +50,10 @@ class MysqlDB(metaclass=Singleton):
             self.__iniciar_mysql(puerto_socket_ssh)
         except Exception:
             self.__mysql_log.error_log("No se han podido iniciar las instancias de la conexion")
+            self.__mysql_log.info_log("Inciando conexion con una base de datos local")
+            self.__iniciar_mysql("3306")
+        except Exception:
+            self.__mysql_log.error_log("No se han podido iniciar las instancias de la conexion")
 
     def __iniciar_ssh(self) -> str:
         self.__obtener_direccion_remota_ssh()
@@ -73,7 +77,7 @@ class MysqlDB(metaclass=Singleton):
     def __crear_tunel_ssh(self) -> SSHTunnelForwarder:
         try:
             server = SSHTunnelForwarder(
-            (SSH_IP_REMOTA , SSH_PUERTO),
+            (SSH_IP_REMOTA, SSH_PUERTO),
             ssh_username = SSH_NOMBRE_USUARIO,
             ssh_pkey = SSH_PRIVATE_KEY_PATH,
             remote_bind_address=(MYSQL_IP_LOCAL, MYSQl_PUERTO),

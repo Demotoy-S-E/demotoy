@@ -31,7 +31,7 @@ ssh -i "[clave privada]" [usuario administrador o sudo]@[ip servidor]
 ```
 Ejemplo:
 ```
-ssh -i "mi-clave.pem" ubuntu_user@14-15.amazon.com
+ssh -i "mi-clave-privada.pem" ubuntu_user@14-15.amazon.com
 ```
 Dockerfile-Mysql:
 ```

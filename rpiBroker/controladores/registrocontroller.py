@@ -4,12 +4,12 @@ from static.constantes import (
     TEMPLATE_INDEX_CONSTANTE, 
     TEMPLATE_REGISTRO_CONSTANTE,
     DIRECCION_INDEX_CONSTANTE)
-from modelos.vista.crearModeloUsuario import CrearModeloUsuario
+from modelos.usuario import Usuario
 
 class Registrocontroller(MethodView):
 
-    def __init__(self, autenticacion, registro_controller_log):
-        self.__autenticacion = autenticacion
+    def __init__(self, repositorio_usuario, registro_controller_log):
+        self.___repositorio_usuario = repositorio_usuario
         self.__registro_log = registro_controller_log
 
     def get(self):
@@ -26,8 +26,8 @@ class Registrocontroller(MethodView):
         else:
             return self.__devolver_index_si_crea_usuario(nuevo_usuario)
     
-    def __obtener_parametros_request(self, informacion_request) -> CrearModeloUsuario:
-        nuevo_usuario = CrearModeloUsuario(
+    def __obtener_parametros_request(self, informacion_request) -> Usuario:
+        nuevo_usuario = Usuario(
             nombre = informacion_request.get("nombre"),
             email = informacion_request.get("email"),
             contrasenia = informacion_request.get("contrasenia"),
@@ -45,9 +45,9 @@ class Registrocontroller(MethodView):
         return campos_requeridos
 
     def __devolver_index_si_crea_usuario(self, nuevo_usuario):
-        usuario_creado = self.__autenticacion.crear_usuario(nuevo_usuario)
-        if (usuario_creado):
+        resultado = self.___repositorio_usuario.crear_usuario(nuevo_usuario)
+        if (resultado.is_success):
             return redirect(DIRECCION_INDEX_CONSTANTE)
-        else:
+        elif (resultado.is_error):
             feedback = f"El usuario {nuevo_usuario.nombre} no es correcto o ya existe"
             return render_template(TEMPLATE_REGISTRO_CONSTANTE, feedback=feedback)
