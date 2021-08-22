@@ -7,6 +7,7 @@ import modelos.crudResultT as crudResultT
 CrudResultT = crudResultT.CrudResultT
 from modelos.crudResult import CrudResult
 from servicios.weblogging import Applogging
+import asyncio
 
 class RepositorioUsuario(RepositorioBase[Usuario]):
 
@@ -44,7 +45,7 @@ class RepositorioUsuario(RepositorioBase[Usuario]):
             return crudResult.error()
         else: 
             self.__repositorio_log.info_log(f"El suaurio {usuario.nombre} no existe")
-            resultado = await self.insertar_entidad(usuario)
+            resultado = await self.task_insertar_entidad(usuario)
             if (resultado):
                 crudResult.success()
             else:
